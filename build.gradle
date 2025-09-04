@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.5.4'
     id 'io.spring.dependency-management' version '1.1.7'
+    id 'com.google.cloud.tools.jib' version '3.4.2'
 }
 
 group = 'com.ssafy'
@@ -53,7 +54,7 @@ dependencies {
 
     // mongodb
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb:3.5.3'
-    
+
     //aws
     implementation 'io.awspring.cloud:spring-cloud-aws-starter:3.3.0'
 
