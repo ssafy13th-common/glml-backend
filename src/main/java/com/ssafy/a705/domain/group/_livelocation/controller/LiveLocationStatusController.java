@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/group/{group-id}/live-location/status")
+@RequestMapping("/api/v1/group/{group-id}/live-location/status")
 public class LiveLocationStatusController {
 
     private final LiveLocationStatusService liveLocationStatusService;

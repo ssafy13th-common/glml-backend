@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/groups")
+@RequestMapping("/api/v1/groups")
 public class GroupMemberRestController {
 
     private final GroupMemberService groupMemberService;        // group 정보를 조회할 필요가 없는 경우에는 groupMemberService만 사용

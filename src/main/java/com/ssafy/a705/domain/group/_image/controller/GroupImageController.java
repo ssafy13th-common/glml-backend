@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/groups/{group-id}/images")
+@RequestMapping("/api/v1/groups/{group-id}/images")
 public class GroupImageController {
 
     private final GroupImageService groupImageService;

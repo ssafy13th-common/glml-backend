@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/groups/{group-id}/memos")
+@RequestMapping("/api/v1/groups/{group-id}/memos")
 public class GroupMemoRestController {
 
     private final GroupMemoService groupMemoService;

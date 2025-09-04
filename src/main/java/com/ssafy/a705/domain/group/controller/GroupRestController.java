@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/groups")
+@RequestMapping("/api/v1/groups")
 public class GroupRestController {
 
     private final GroupAggregateService groupAggregateService;

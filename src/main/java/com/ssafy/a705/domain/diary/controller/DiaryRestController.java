@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/diaries")
+@RequestMapping("/api/v1/diaries")
 public class DiaryRestController {
 
     private final DiaryService diaryService;
