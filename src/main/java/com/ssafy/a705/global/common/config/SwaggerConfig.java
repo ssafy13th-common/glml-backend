@@ -7,12 +7,12 @@ import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.security.SecurityScheme.In;
 import io.swagger.v3.oas.models.security.SecurityScheme.Type;
-import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class SwaggerConfig {
+
     private static final String SCHEMA_NAME = "Authorization";
 
     @Bean
@@ -20,7 +20,6 @@ public class SwaggerConfig {
         return new OpenAPI()
                 .info(apiInfo())
                 .components(appAuthorization())
-                .addServersItem(new Server().url("/api"))
                 .addSecurityItem(security());
     }
 
@@ -31,7 +30,7 @@ public class SwaggerConfig {
                 .version("1.0.0");
     }
 
-    private Components appAuthorization(){
+    private Components appAuthorization() {
         return new Components()
                 .addSecuritySchemes(SCHEMA_NAME, new SecurityScheme()
                         .name(SCHEMA_NAME)
@@ -39,7 +38,7 @@ public class SwaggerConfig {
                         .in(In.HEADER));
     }
 
-    private SecurityRequirement security(){
+    private SecurityRequirement security() {
         return new SecurityRequirement().addList(SCHEMA_NAME);
     }
 
