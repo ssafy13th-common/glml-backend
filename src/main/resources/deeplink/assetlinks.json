@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.ssafy.a705",
+      "sha256_cert_fingerprints": [
+        "1D:BC:0D:AF:A0:81:55:E6:21:E3:76:4D:7E:6F:4D:78:32:A6:7F:0E:D4:8F:29:8B:62:10:42:53:FA:41:96:B5"
+      ]
+    }
+  }
+]
