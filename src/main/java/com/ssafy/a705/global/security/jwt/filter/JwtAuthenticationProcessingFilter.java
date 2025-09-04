@@ -25,7 +25,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
-    private static final String NO_CHECK_URL = "/v1/auth/login";
+    private static final String NO_CHECK_URL = "/api/v1/auth/login";
 
     private final JwtProvider jwtProvider;
     private final RedisService redisService;
