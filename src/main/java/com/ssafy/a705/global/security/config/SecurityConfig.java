@@ -41,7 +41,8 @@ public class SecurityConfig {
     private static final String LOGIN_URL = "/api/v1/auth/login";
     private static final String LOCATION_DB_URL = "/api/v1/locations/infos";
     private static final String[] AUTH_URLS = {
-            "/api/v1/auth/signup", "/api/v1/auth/verify", "/api/v1/auth/verify/resend", "/api/v1/auth/email"
+            "/api/v1/auth/signup", "/api/v1/auth/verify", "/api/v1/auth/verify/resend",
+            "/api/v1/auth/email"
     };
     private static final String[] SWAGGER_URLS = {
             "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**"
@@ -49,7 +50,7 @@ public class SecurityConfig {
     private static final String[] DOMAIN_URLS = {
             "/api/v1/boards", "/api/v1/locations", "/api/v1/groups"
     };
-    private static final String KAKAO_TOKEN_URL = "/v1/auth/kakao/**";
+    private static final String KAKAO_TOKEN_URL = "/api/v1/auth/kakao/**";
     private static final String LOGOUT_URL = "/api/v1/auth/logout";
     private static final String ASSET_LINKS_URL = "/.well-known/assetlinks.json";
 
