@@ -9,7 +9,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
-import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -50,6 +49,10 @@ public class Member extends BaseEntity {
     @Lob
     @Comment("회원 프로필 이미지 url")
     private String profileUrl;
+
+//    @Comment("회원 프로필 이미지 url")
+//    @OneToOne(mappedBy = "member", fetch = FetchType.LAZY)
+//    private MemberImage profileUrl;
 
     @Comment("회원 역할")
     @Column(nullable = false, length = 6)
