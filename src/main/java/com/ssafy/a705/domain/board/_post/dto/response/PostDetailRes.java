@@ -1,6 +1,6 @@
 package com.ssafy.a705.domain.board._post.dto.response;
 
-import com.ssafy.a705.domain.board._reply.dto.response.CommentRes;
+import com.ssafy.a705.domain.board._reply.dto.response.ReplyRes;
 import com.ssafy.a705.domain.board._reply.entity.Reply;
 import com.ssafy.a705.domain.board._post.entity.Post;
 import java.time.LocalDate;
@@ -14,14 +14,14 @@ public record PostDetailRes(
         String authorProfileUrl,
         String authorEmail,
         LocalDate updatedDate,
-        List<CommentRes> comments
+        List<ReplyRes> repliesRes
 ) {
 
-    public static PostDetailRes from(Post post, List<Reply> comments,
+    public static PostDetailRes from(Post post, List<Reply> replies,
             Map<Long, String> profileUrls) {
-        List<CommentRes> commentRes = comments.stream()
+        List<ReplyRes> replyRes = replies.stream()
                 .map(value ->
-                        CommentRes.from(value, profileUrls.get(value.getMember().getId())))
+                        ReplyRes.from(value, profileUrls.get(value.getMember().getId())))
                 .toList();
 
         return new PostDetailRes(
@@ -31,7 +31,7 @@ public record PostDetailRes(
                 profileUrls.get(post.getMember().getId()),
                 post.getMember().getEmail(),
                 post.getModifiedAt().toLocalDate(),
-                commentRes
+                replyRes
         );
     }
 

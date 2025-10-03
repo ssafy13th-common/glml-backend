@@ -1,7 +1,7 @@
 package com.ssafy.a705.domain.board._post.service;
 
 import com.ssafy.a705.domain.board._reply.entity.Reply;
-import com.ssafy.a705.domain.board._reply.repository.CompanyCommentRepository;
+import com.ssafy.a705.domain.board._reply.repository.ReplyRepository;
 import com.ssafy.a705.domain.board._post.dto.request.PostDetailReq;
 import com.ssafy.a705.domain.board._post.dto.response.PostCreateRes;
 import com.ssafy.a705.domain.board._post.dto.response.PostDetailRes;
@@ -35,7 +35,7 @@ public class PostService {
     private final S3PresignedUploader uploader;
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
-    private final CompanyCommentRepository commentRepository;
+    private final ReplyRepository replyRepository;
 
     @Transactional
     public PostCreateRes createPost(PostDetailReq postReq, CustomUserDetails userDetails) {
@@ -58,22 +58,22 @@ public class PostService {
     public PostDetailRes getPost(Long postId, CustomUserDetails userDetails) {
         Member member = memberRepository.getById(userDetails.getId());
         Post post = getPostById(postId);
-        List<Reply> comments = commentRepository.findAllByCompanyBoardAndNotDeleted(post);
+        List<Reply> replies = replyRepository.findAllByPostAndNotDeleted(post);
 
         Map<Long, String> urls = new HashMap<>();
         String url = getUrl(post.getMember().getProfileUrl());
         urls.put(post.getMember().getId(), url);
 
-        for (Reply comment : comments) {
-            if (urls.containsKey(comment.getMember().getId())) {
+        for (Reply reply : replies) {
+            if (urls.containsKey(reply.getMember().getId())) {
                 continue;
             }
 
-            url = getUrl(comment.getMember().getProfileUrl());
-            urls.put(comment.getMember().getId(), url);
+            url = getUrl(reply.getMember().getProfileUrl());
+            urls.put(reply.getMember().getId(), url);
         }
 
-        return PostDetailRes.from(post, comments, urls);
+        return PostDetailRes.from(post, replies, urls);
     }
 
     @Transactional

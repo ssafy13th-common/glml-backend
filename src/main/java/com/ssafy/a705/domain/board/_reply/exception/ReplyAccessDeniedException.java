@@ -3,11 +3,11 @@ package com.ssafy.a705.domain.board._reply.exception;
 import com.ssafy.a705.global.common.exception.ApiException;
 import org.springframework.http.HttpStatus;
 
-public class CommentAccessDeniedException extends ApiException {
+public class ReplyAccessDeniedException extends ApiException {
 
     private static final String MESSAGE = "댓글 접근 권한이 없습니다.";
 
-    public CommentAccessDeniedException() {
+    public ReplyAccessDeniedException() {
         super(HttpStatus.FORBIDDEN, MESSAGE);
     }
 }

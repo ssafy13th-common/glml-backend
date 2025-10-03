@@ -1,15 +1,15 @@
 package com.ssafy.a705.domain.member.service;
 
 import com.ssafy.a705.domain.board._reply.entity.Reply;
-import com.ssafy.a705.domain.board._reply.service.CommentService;
+import com.ssafy.a705.domain.board._reply.service.ReplyService;
 import com.ssafy.a705.domain.board._post.entity.Post;
 import com.ssafy.a705.domain.board._post.service.PostService;
 import com.ssafy.a705.domain.member.dto.request.UpdateNicknameReq;
 import com.ssafy.a705.domain.member.dto.request.UpdateProfileReq;
-import com.ssafy.a705.domain.member.dto.response.MemberBoardsRes;
-import com.ssafy.a705.domain.member.dto.response.MemberCommentsRes;
+import com.ssafy.a705.domain.member.dto.response.MemberPostsRes;
 import com.ssafy.a705.domain.member.dto.response.MemberDetailRes;
 import com.ssafy.a705.domain.member.dto.response.MemberInfosRes;
+import com.ssafy.a705.domain.member.dto.response.MemberRepliesRes;
 import com.ssafy.a705.domain.member.entity.Member;
 import com.ssafy.a705.domain.member.exception.DuplicatedEmailException;
 import com.ssafy.a705.domain.member.repository.MemberRepository;
@@ -32,25 +32,25 @@ public class MemberService {
 
     private final PostService postService;
     private final S3PresignedUploader uploader;
-    private final CommentService commentService;
+    private final ReplyService replyService;
     private final MemberRepository memberRepository;
 
     @Transactional(readOnly = true)
-    public MemberBoardsRes getMemberBoards(CustomUserDetails userDetails, Pageable pageable) {
+    public MemberPostsRes getMemberBoards(CustomUserDetails userDetails, Pageable pageable) {
         Member member = memberRepository.getById(userDetails.getId());
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
                 Sort.by("id").descending());
         Page<Post> boards = postService.getMemberPost(member, pageable);
-        return MemberBoardsRes.from(boards);
+        return MemberPostsRes.from(boards);
     }
 
     @Transactional(readOnly = true)
-    public MemberCommentsRes getMemberComments(CustomUserDetails userDetails, Pageable pageable) {
+    public MemberRepliesRes getMemberReplys(CustomUserDetails userDetails, Pageable pageable) {
         Member member = memberRepository.getById(userDetails.getId());
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
                 Sort.by("id").descending());
-        Page<Reply> comments = commentService.getMemberComments(member, pageable);
-        return MemberCommentsRes.from(comments);
+        Page<Reply> replys = replyService.getMemberReplies(member, pageable);
+        return MemberRepliesRes.from(replys);
     }
 
     @Transactional(readOnly = true)

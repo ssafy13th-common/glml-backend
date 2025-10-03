@@ -4,18 +4,18 @@ import com.ssafy.a705.domain.board._reply.entity.Reply;
 import java.util.List;
 import org.springframework.data.domain.Page;
 
-public record MemberCommentsRes(
-        List<MemberComment> comments,
+public record MemberRepliesRes(
+        List<MemberReply> comments,
         int pageNumber,
         int pageSize,
         long totalElements,
         int totalPages
 ) {
 
-    public static MemberCommentsRes from(Page<Reply> comments) {
-        return new MemberCommentsRes(
+    public static MemberRepliesRes from(Page<Reply> comments) {
+        return new MemberRepliesRes(
                 comments.stream()
-                        .map(MemberComment::from)
+                        .map(MemberReply::from)
                         .toList(),
                 comments.getNumber(),
                 comments.getSize(),

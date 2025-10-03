@@ -4,27 +4,27 @@ import com.ssafy.a705.domain.board._reply.entity.Reply;
 import java.time.LocalDate;
 import java.util.Objects;
 
-public record CommentRes(
+public record ReplyRes(
         Long id,
         String content,
         String author,
         String authorProfileUrl,
         String authorEmail,
         LocalDate updatedDate,
-        Long parentComment
+        Long parentReply
 ) {
 
-    public static CommentRes from(Reply comment, String url) {
-        Reply parent = comment.getParent();
+    public static ReplyRes from(Reply reply, String url) {
+        Reply parent = reply.getParent();
         Long parentId = (Objects.isNull(parent)) ? null : parent.getId();
 
-        return new CommentRes(
-                comment.getId(),
-                comment.getContent(),
-                comment.getMember().getNickname(),
+        return new ReplyRes(
+                reply.getId(),
+                reply.getContent(),
+                reply.getMember().getNickname(),
                 url,
-                comment.getMember().getEmail(),
-                comment.getModifiedAt().toLocalDate(),
+                reply.getMember().getEmail(),
+                reply.getModifiedAt().toLocalDate(),
                 parentId
         );
     }

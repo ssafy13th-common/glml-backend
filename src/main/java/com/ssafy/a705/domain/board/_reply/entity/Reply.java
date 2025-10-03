@@ -1,7 +1,7 @@
 package com.ssafy.a705.domain.board._reply.entity;
 
-import com.ssafy.a705.domain.board._reply.dto.request.CommentRegisterReq;
-import com.ssafy.a705.domain.board._reply.dto.request.CommentUpdateReq;
+import com.ssafy.a705.domain.board._reply.dto.request.ReplyRegisterReq;
+import com.ssafy.a705.domain.board._reply.dto.request.ReplyUpdateReq;
 import com.ssafy.a705.domain.board._post.entity.Post;
 import com.ssafy.a705.domain.member.entity.Member;
 import com.ssafy.a705.global.common.BaseEntity;
@@ -51,13 +51,13 @@ public class Reply extends BaseEntity {
         this.parent = parent;
     }
 
-    public static Reply from(CommentRegisterReq commentReq, Post board,
+    public static Reply from(ReplyRegisterReq commentReq, Post post,
             Member member, Reply parent) {
-        return new Reply(commentReq.content(), board, member, parent);
+        return new Reply(commentReq.content(), post, member, parent);
     }
 
-    public void updateContent(CommentUpdateReq commentUpdateReq) {
-        this.content = commentUpdateReq.content();
+    public void updateContent(ReplyUpdateReq replyUpdateReq) {
+        this.content = replyUpdateReq.content();
     }
 
     public void deleteReply() {
