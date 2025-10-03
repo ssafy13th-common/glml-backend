@@ -17,10 +17,10 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
 
     Optional<Group> findByIdAndDeletedAtIsNull(@NonNull Long groupId);
 
-    @Query("SELECT g FROM Participant gm "
-            + "JOIN gm.group g "
-            + "WHERE gm.member.id = :memberId "
-            + "AND gm.deletedAt IS NULL "
+    @Query("SELECT g FROM Participant p "
+            + "JOIN p.group g "
+            + "WHERE p.member.id = :memberId "
+            + "AND p.deletedAt IS NULL "
             + "AND g.deletedAt IS NULL")
     List<Group> findGroupsByMemberId(@Param("memberId") Long memberId);
 

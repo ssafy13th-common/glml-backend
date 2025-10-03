@@ -7,11 +7,11 @@ import com.ssafy.a705.domain.chat.dto.request.CreateRoomReq;
 import com.ssafy.a705.domain.chat.dto.request.RemoveMemberReq;
 import com.ssafy.a705.domain.chat.dto.response.ChatRoomRes;
 import com.ssafy.a705.domain.chat.service.ChatRoomService;
-import com.ssafy.a705.domain.group._member.dto.response.GroupMemberProfileRes;
-import com.ssafy.a705.domain.group._member.entity.Participant;
-import com.ssafy.a705.domain.group._member.entity.Role;
-import com.ssafy.a705.domain.group._member.exception.DuplicatedGroupMemberException;
-import com.ssafy.a705.domain.group._member.service.GroupMemberService;
+import com.ssafy.a705.domain.group._participant.dto.response.ParticipantProfileRes;
+import com.ssafy.a705.domain.group._participant.entity.Participant;
+import com.ssafy.a705.domain.group._participant.entity.Role;
+import com.ssafy.a705.domain.group._participant.exception.DuplicatedParticipantException;
+import com.ssafy.a705.domain.group._participant.service.ParticipantService;
 import com.ssafy.a705.domain.group.dto.request.GroupReq;
 import com.ssafy.a705.domain.group.dto.request.GroupUpdateReq;
 import com.ssafy.a705.domain.group.dto.response.GroupGatheringRes;
@@ -35,7 +35,7 @@ public class GroupAggregateService {
 
     private final MemberRepository memberRepository;
     private final GroupService groupService;
-    private final GroupMemberService groupMemberService;
+    private final ParticipantService participantService;
     private final ChatRoomService chatRoomService;              // 채팅방 service
 
     /**
@@ -64,7 +64,7 @@ public class GroupAggregateService {
 
         // 3. GroupMember가 있다면 Member 추가 및 채팅방에 추가
         if (groupReq.members() != null && !groupReq.members().isEmpty()) {
-            createGroupMembers(createdGroup.getId(), groupReq.members(),
+            createParticipants(createdGroup.getId(), groupReq.members(),
                     customUserDetails);
         }
 
@@ -79,7 +79,7 @@ public class GroupAggregateService {
      * @return 그룹 상세 정보 Response
      */
     public GroupInfoRes getGroup(Long groupId, CustomUserDetails customUserDetails) {
-        groupMemberService.memberAuthorityCheck(groupId, customUserDetails);    // 그룹 접근 권한 체크
+        participantService.memberAuthorityCheck(groupId, customUserDetails);    // 그룹 접근 권한 체크
         Group group = groupService.getGroup(groupId);        // 그룹 불러오기
         return GroupInfoRes.from(group);
     }
@@ -97,7 +97,7 @@ public class GroupAggregateService {
 
         List<Group> groups = groupService.getGroups(customUserDetails); // 그룹 목록 불러오기
         List<Long> groupIds = groups.stream().map(Group::getId).toList();
-        List<GroupMemberProfileRes> profileDtos = groupMemberService.getGroupMemberProfiles(
+        List<ParticipantProfileRes> profileDtos = participantService.getParticipantProfiles(
                 groupIds); // 그룹 멤버 프로필만 추출
 
         return GroupsRes.of(groups, groupIds, profileDtos);
@@ -113,7 +113,7 @@ public class GroupAggregateService {
      */
     public GroupInfoRes updateGroup(Long groupId, GroupUpdateReq groupUpdateReq,
             CustomUserDetails customUserDetails) {
-        groupMemberService.adminAuthorityCheck(groupId, customUserDetails);     // 권한체크
+        participantService.adminAuthorityCheck(groupId, customUserDetails);     // 권한체크
 
         Group updatedGroup = groupService.updateGroup(groupId, groupUpdateReq); // 업데이트
 
@@ -127,14 +127,14 @@ public class GroupAggregateService {
      * @param customUserDetails 인증된 유저 디테일
      */
     public void deleteGroup(Long groupId, CustomUserDetails customUserDetails) {
-        groupMemberService.adminAuthorityCheck(groupId, customUserDetails); // 권한체크
+        participantService.adminAuthorityCheck(groupId, customUserDetails); // 권한체크
         groupService.deleteGroup(groupId); // 삭제처리
     }
 
     @Transactional(readOnly = true)
     public GroupGatheringRes getGroupGatheringInfo(Long groupId,
             CustomUserDetails customUserDetails) {
-        groupMemberService.memberAuthorityCheck(groupId, customUserDetails);
+        participantService.memberAuthorityCheck(groupId, customUserDetails);
 
         Group group = groupService.getGroup(groupId);
         return GroupGatheringRes.from(group);
@@ -148,17 +148,17 @@ public class GroupAggregateService {
      */
     public void createGroupAdmin(Long groupId,
             CustomUserDetails customUserDetails) {
-        if (groupMemberService.isExists(groupId, customUserDetails)) {
-            throw new DuplicatedGroupMemberException();
+        if (participantService.isExists(groupId, customUserDetails)) {
+            throw new DuplicatedParticipantException();
         }
         Member member = memberRepository.getById(customUserDetails.getId());
         Group group = groupService.getGroup(groupId);
-        Participant groupMember = Participant.of(group, member, Role.ADMIN);
+        Participant groupMember = Participant.of(group, member, Role.LEADER);
 
         chatRoomService.addMember(
                 AddMemberReq.of(group.getChatRoomId(), member.getEmail(), member.getNickname()));
 
-        groupMemberService.saveMember(groupMember);
+        participantService.saveParticipant(groupMember);
     }
 
     /**
@@ -167,39 +167,39 @@ public class GroupAggregateService {
      * @param groupId 멤버를 추가하려는 그룹의 ID
      * @param emails  유저 이메일 목록을 담고 있는 리스트
      */
-    public void createGroupMembers(Long groupId,
+    public void createParticipants(Long groupId,
             List<String> emails, CustomUserDetails customUserDetails) {
 
-        groupMemberService.adminAuthorityCheck(groupId, customUserDetails); // 권한 체크
+        participantService.adminAuthorityCheck(groupId, customUserDetails); // 권한 체크
 
         Group group = groupService.getGroup(groupId);
         List<Member> members = memberRepository.getAllByEmail(emails);
-        Set<Long> existingMemberIds = groupMemberService.getExistingEmails(groupId, emails);
+        Set<Long> existingParticipantIds = participantService.getExistingEmails(groupId, emails);
         // 각 유저 별 중복 체크 후 생성
-        List<Participant> newGroupMembers = members.stream()
-                .filter(member -> !existingMemberIds.contains(member.getId()))
+        List<Participant> newParticipants = members.stream()
+                .filter(member -> !existingParticipantIds.contains(member.getId()))
                 .map(member -> Participant.of(group, member, Role.MEMBER))
                 .toList();
 
         // 중복 제거된 id와 nickname 맵 형성
-        List<ChatMemberInfoDTO> infoList = newGroupMembers.stream()
+        List<ChatMemberInfoDTO> infoList = newParticipants.stream()
                 .map(groupMember -> ChatMemberInfoDTO.of(groupMember.getMember().getEmail(),
                         groupMember.getMember().getNickname())).toList();
 
         // 채팅방에 멤버 추가 및 저장
         chatRoomService.addMembers(
                 AddMembersReq.of(group.getChatRoomId(), infoList));
-        groupMemberService.saveAllMembers(newGroupMembers);
+        participantService.saveAllParticipants(newParticipants);
     }
 
-    public void deleteGroupMember(Long groupId, String email,
+    public void deleteParticipant(Long groupId, String email,
             CustomUserDetails customUserDetails) {
-        groupMemberService.deleteGroupMember(groupId, email, customUserDetails);
+        participantService.deleteParticipant(groupId, email, customUserDetails);
         Group group = groupService.getGroup(groupId);
 
-        List<ChatMemberInfoDTO> infoList = groupMemberService.getGroupMemberEntities(groupId,
-                customUserDetails).stream().map(groupMember -> {
-            Member m = groupMember.getMember();
+        List<ChatMemberInfoDTO> infoList = participantService.getParticipantEntities(groupId,
+                customUserDetails).stream().map(participant -> {
+            Member m = participant.getMember();
             return ChatMemberInfoDTO.of(m.getEmail(), m.getNickname());
         }).toList();
 

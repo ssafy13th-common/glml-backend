@@ -1,6 +1,6 @@
 package com.ssafy.a705.domain.group._memo.entity;
 
-import com.ssafy.a705.domain.group._member.entity.Participant;
+import com.ssafy.a705.domain.group._participant.entity.Participant;
 import com.ssafy.a705.global.common.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

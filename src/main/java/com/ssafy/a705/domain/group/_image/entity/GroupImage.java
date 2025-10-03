@@ -1,6 +1,6 @@
 package com.ssafy.a705.domain.group._image.entity;
 
-import com.ssafy.a705.domain.group._member.entity.Participant;
+import com.ssafy.a705.domain.group._participant.entity.Participant;
 import com.ssafy.a705.global.common.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

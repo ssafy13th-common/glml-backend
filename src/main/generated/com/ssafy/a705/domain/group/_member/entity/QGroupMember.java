@@ -1,4 +1,4 @@
-package com.ssafy.a705.domain.group._member.entity;
+package com.ssafy.a705.domain.group._participant.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 

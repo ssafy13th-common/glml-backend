@@ -5,7 +5,7 @@ import com.ssafy.a705.domain.group._livelocation.dto.GroupGatheringDto;
 import com.ssafy.a705.domain.group._livelocation.dto.LiveLocationReq;
 import com.ssafy.a705.domain.group._livelocation.dto.LiveLocationRes;
 import com.ssafy.a705.domain.group._livelocation.repository.LiveLocationRedisRepository;
-import com.ssafy.a705.domain.group._member.service.GroupMemberService;
+import com.ssafy.a705.domain.group._participant.service.ParticipantService;
 import com.ssafy.a705.global.common.utils.GeoUtils;
 import com.ssafy.a705.global.security.websocket.WebSocketSessionManager;
 import java.time.Duration;
@@ -25,7 +25,7 @@ public class LiveLocationService {
     private final LiveLocationRedisRepository liveLocationRedisRepository;
     private final LiveLocationStatusService liveLocationStatusService;
     private final WebSocketSessionManager sessionManager;
-    private final GroupMemberService groupMemberService;
+    private final ParticipantService participantService;
     private final ObjectMapper objectMapper;
 
     private static final double ARRIVE_APPROVED_RADIUS = 50.0;
@@ -52,7 +52,7 @@ public class LiveLocationService {
                 lateFee);
         liveLocationRedisRepository.saveLocation(liveLocationRes);
         if (arrived) {
-            groupMemberService.updateGroupMemberLateFee(liveLocationReq.groupId(), lateFee,
+            participantService.updateParticipantLateFee(liveLocationReq.groupId(), lateFee,
                     memberEmail);
             liveLocationRedisRepository.removePendingMember(liveLocationReq.groupId(), memberEmail);
             if (liveLocationRedisRepository.countPendingMembers(liveLocationReq.groupId()) == 0L) {

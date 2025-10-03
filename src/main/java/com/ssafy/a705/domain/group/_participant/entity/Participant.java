@@ -1,4 +1,4 @@
-package com.ssafy.a705.domain.group._member.entity;
+package com.ssafy.a705.domain.group._participant.entity;
 
 import com.ssafy.a705.domain.group.entity.Group;
 import com.ssafy.a705.domain.member.entity.Member;
