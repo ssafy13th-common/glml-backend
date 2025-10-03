@@ -43,7 +43,7 @@ public class ParticipantRestController {
 
 
     @PostMapping("/{group-id}/participants")
-    public ResponseEntity<ApiResponse<Void>> createGroupMember(
+    public ResponseEntity<ApiResponse<Void>> createParticipant(
             @PathVariable("group-id") Long groupId,
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestBody ParticipantsReq request) {
@@ -52,7 +52,7 @@ public class ParticipantRestController {
     }
 
     @PutMapping("/{group-id}/participants")
-    public ResponseEntity<ApiResponse<ParticipantsRes>> updateGroupMember(
+    public ResponseEntity<ApiResponse<ParticipantsRes>> updateParticipant(
             @PathVariable("group-id") Long groupId,
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestBody ParticipantsUpdateReq request
@@ -62,8 +62,9 @@ public class ParticipantRestController {
         return ApiResponse.ok(participantsRes);
     }
 
+    // TODO api가 /members로 되어 있습니다. dto가 아니라 map으로 받고 있습니다.
     @DeleteMapping("/{group-id}/members")
-    public ResponseEntity<ApiResponse<Void>> deleteGroupMember(
+    public ResponseEntity<ApiResponse<Void>> deleteParticipant(
             @PathVariable("group-id") Long groupId,
             @AuthenticationPrincipal CustomUserDetails customUserDetails,
             @RequestBody Map<String, String> email
