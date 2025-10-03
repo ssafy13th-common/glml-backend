@@ -12,13 +12,13 @@ public record MemberPostsRes(
         int totalPages
 ) {
 
-    public static MemberPostsRes from(Page<Post> boards) {
-        return new MemberPostsRes(boards.stream()
+    public static MemberPostsRes from(Page<Post> posts) {
+        return new MemberPostsRes(posts.stream()
                 .map(MemberPost::from).toList(),
-                boards.getNumber(),
-                boards.getSize(),
-                boards.getTotalElements(),
-                boards.getTotalPages()
+                posts.getNumber(),
+                posts.getSize(),
+                posts.getTotalElements(),
+                posts.getTotalPages()
         );
     }
 

@@ -5,22 +5,22 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 
 public record MemberRepliesRes(
-        List<MemberReply> comments,
+        List<MemberReply> replies,
         int pageNumber,
         int pageSize,
         long totalElements,
         int totalPages
 ) {
 
-    public static MemberRepliesRes from(Page<Reply> comments) {
+    public static MemberRepliesRes from(Page<Reply> replies) {
         return new MemberRepliesRes(
-                comments.stream()
+                replies.stream()
                         .map(MemberReply::from)
                         .toList(),
-                comments.getNumber(),
-                comments.getSize(),
-                comments.getTotalElements(),
-                comments.getTotalPages()
+                replies.getNumber(),
+                replies.getSize(),
+                replies.getTotalElements(),
+                replies.getTotalPages()
         );
     }
 
