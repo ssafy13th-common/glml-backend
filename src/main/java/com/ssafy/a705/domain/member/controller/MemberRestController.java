@@ -43,7 +43,7 @@ public class MemberRestController {
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @PageableDefault Pageable pageable
     ) {
-        MemberRepliesRes repliesRes = memberService.getMemberReplys(userDetails, pageable);
+        MemberRepliesRes repliesRes = memberService.getMemberReplies(userDetails, pageable);
         return ApiResponse.ok(repliesRes);
     }
 

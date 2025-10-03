@@ -45,12 +45,12 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public MemberRepliesRes getMemberReplys(CustomUserDetails userDetails, Pageable pageable) {
+    public MemberRepliesRes getMemberReplies(CustomUserDetails userDetails, Pageable pageable) {
         Member member = memberRepository.getById(userDetails.getId());
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
                 Sort.by("id").descending());
-        Page<Reply> replys = replyService.getMemberReplies(member, pageable);
-        return MemberRepliesRes.from(replys);
+        Page<Reply> replies = replyService.getMemberReplies(member, pageable);
+        return MemberRepliesRes.from(replies);
     }
 
     @Transactional(readOnly = true)
