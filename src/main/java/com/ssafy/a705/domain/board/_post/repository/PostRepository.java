@@ -22,6 +22,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             Pageable pageable
     );
 
-    @Query("SELECT b FROM Post b WHERE b.member = :member AND b.deletedAt IS NULL")
+    @Query("SELECT p FROM Post p WHERE p.member = :member AND p.deletedAt IS NULL")
     Page<Post> findAllByMemberNotDeleted(Member member, Pageable pageable);
 }

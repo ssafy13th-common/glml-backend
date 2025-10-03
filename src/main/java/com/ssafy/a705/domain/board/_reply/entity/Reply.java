@@ -51,9 +51,9 @@ public class Reply extends BaseEntity {
         this.parent = parent;
     }
 
-    public static Reply from(ReplyRegisterReq commentReq, Post post,
+    public static Reply from(ReplyRegisterReq replyReq, Post post,
             Member member, Reply parent) {
-        return new Reply(commentReq.content(), post, member, parent);
+        return new Reply(replyReq.content(), post, member, parent);
     }
 
     public void updateContent(ReplyUpdateReq replyUpdateReq) {
