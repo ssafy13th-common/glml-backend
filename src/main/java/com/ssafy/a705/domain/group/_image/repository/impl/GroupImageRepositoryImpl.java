@@ -1,7 +1,7 @@
 package com.ssafy.a705.domain.group._image.repository.impl;
 
 import static com.ssafy.a705.domain.group._image.entity.QGroupImage.groupImage;
-import static com.ssafy.a705.domain.group._participant.entity.QGroupMember.groupMember;
+import static com.ssafy.a705.domain.group._participant.entity.QParticipant.participant;
 import static com.ssafy.a705.domain.group.entity.QGroup.group;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -20,10 +20,10 @@ public class GroupImageRepositoryImpl implements GroupImageRepositoryCustom {
     public List<GroupImage> findGroupImagesByGroupId(Long groupId,
             @Nullable Long cursorId, int pageSize) {
         return queryFactory.selectFrom(groupImage)
-                .join(groupImage.groupMember, groupMember)
-                .join(groupMember.group, group)
+                .join(groupImage.participant, participant)
+                .join(participant.group, group)
                 .where(
-                        groupImage.groupMember.group.id.eq(groupId),
+                        groupImage.participant.group.id.eq(groupId),
                         groupImage.deletedAt.isNull(),
                         cursorId != null ? groupImage.id.lt(cursorId) : null
 
