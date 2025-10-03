@@ -1,6 +1,7 @@
 package com.ssafy.a705.domain.board._post.entity;
 
 import com.ssafy.a705.domain.board._post.dto.request.PostDetailReq;
+import com.ssafy.a705.domain.board.entity.Board;
 import com.ssafy.a705.domain.member.entity.Member;
 import com.ssafy.a705.global.common.BaseEntity;
 import jakarta.persistence.Entity;
@@ -36,6 +37,10 @@ public class Post extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_id", nullable = false)
+    private Board board;
 
     @Formula("(SELECT COUNT(*) FROM reply c WHERE c.post_id = id AND c.deleted_at IS NULL)")
     private int replyCount;
