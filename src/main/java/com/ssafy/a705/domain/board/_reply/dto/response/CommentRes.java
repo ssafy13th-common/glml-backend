@@ -1,6 +1,6 @@
-package com.ssafy.a705.domain.board._comment.dto.response;
+package com.ssafy.a705.domain.board._reply.dto.response;
 
-import com.ssafy.a705.domain.board._comment.entity.CompanyComment;
+import com.ssafy.a705.domain.board._reply.entity.Reply;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -14,8 +14,8 @@ public record CommentRes(
         Long parentComment
 ) {
 
-    public static CommentRes from(CompanyComment comment, String url) {
-        CompanyComment parent = comment.getParent();
+    public static CommentRes from(Reply comment, String url) {
+        Reply parent = comment.getParent();
         Long parentId = (Objects.isNull(parent)) ? null : parent.getId();
 
         return new CommentRes(

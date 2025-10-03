@@ -1,6 +1,6 @@
 package com.ssafy.a705.domain.member.dto.response;
 
-import com.ssafy.a705.domain.board._comment.entity.CompanyComment;
+import com.ssafy.a705.domain.board._reply.entity.Reply;
 
 public record MemberComment(
         Long boardId,
@@ -9,10 +9,10 @@ public record MemberComment(
         String content
 ) {
 
-    public static MemberComment from(CompanyComment comment) {
+    public static MemberComment from(Reply comment) {
         return new MemberComment(
-                comment.getCompanyBoard().getId(),
-                comment.getCompanyBoard().getTitle(),
+                comment.getPost().getId(),
+                comment.getPost().getTitle(),
                 comment.getId(),
                 comment.getContent()
         );

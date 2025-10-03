@@ -11,7 +11,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,9 +19,8 @@ import org.hibernate.annotations.Comment;
 
 @Entity
 @Getter
-@Table(name = "group_members")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class GroupMember extends BaseEntity {
+public class Participant extends BaseEntity {
 
     @Id
     @Comment("그룹 멤버 식별자")
@@ -31,7 +29,7 @@ public class GroupMember extends BaseEntity {
 
     @Comment("최종 정산 금액")
     @Column(nullable = false)
-    private int finalAmount;
+    private int finalCost;
 
     @Comment("지각비")
     @Column(nullable = false)
@@ -49,30 +47,32 @@ public class GroupMember extends BaseEntity {
     @Column(nullable = false)
     private Role role;
 
-    private GroupMember(Group group, Member member,
+    private Participant(Group group, Member member,
             Role role) {
-        this.finalAmount = 0;
+        this.finalCost = 0;
         this.lateFee = 0;
         this.group = group;
         this.member = member;
         this.role = role;
     }
 
-    public static GroupMember of(Group group, Member member,
+    public static Participant of(Group group, Member member,
             Role role) {
-        return new GroupMember(group, member, role);
-    }
-
-    public void deleteGroupMember() {
-        this.delete(LocalDateTime.now());
+        return new Participant(group, member, role);
     }
 
     public void updateAmount(int finalAmount, int lateFee) {
-        this.finalAmount = finalAmount;
+        this.finalCost = finalAmount;
         this.lateFee = lateFee;
     }
 
     public void upgradeToAdmin() {
-        this.role = Role.ADMIN;
+        this.role = Role.LEADER;
     }
+
+    public void deleteParticipant() {
+        this.delete(LocalDateTime.now());
+    }
+
+
 }

@@ -1,8 +1,8 @@
-package com.ssafy.a705.domain.board._comment.controller;
+package com.ssafy.a705.domain.board._reply.controller;
 
-import com.ssafy.a705.domain.board._comment.dto.request.CommentRegisterReq;
-import com.ssafy.a705.domain.board._comment.dto.request.CommentUpdateReq;
-import com.ssafy.a705.domain.board._comment.service.CommentService;
+import com.ssafy.a705.domain.board._reply.dto.request.CommentRegisterReq;
+import com.ssafy.a705.domain.board._reply.dto.request.CommentUpdateReq;
+import com.ssafy.a705.domain.board._reply.service.CommentService;
 import com.ssafy.a705.global.common.controller.ApiResponse;
 import com.ssafy.a705.global.security.login.dto.CustomUserDetails;
 import jakarta.validation.Valid;

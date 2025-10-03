@@ -8,7 +8,7 @@ import com.ssafy.a705.domain.chat.dto.request.RemoveMemberReq;
 import com.ssafy.a705.domain.chat.dto.response.ChatRoomRes;
 import com.ssafy.a705.domain.chat.service.ChatRoomService;
 import com.ssafy.a705.domain.group._member.dto.response.GroupMemberProfileRes;
-import com.ssafy.a705.domain.group._member.entity.GroupMember;
+import com.ssafy.a705.domain.group._member.entity.Participant;
 import com.ssafy.a705.domain.group._member.entity.Role;
 import com.ssafy.a705.domain.group._member.exception.DuplicatedGroupMemberException;
 import com.ssafy.a705.domain.group._member.service.GroupMemberService;
@@ -153,7 +153,7 @@ public class GroupAggregateService {
         }
         Member member = memberRepository.getById(customUserDetails.getId());
         Group group = groupService.getGroup(groupId);
-        GroupMember groupMember = GroupMember.of(group, member, Role.ADMIN);
+        Participant groupMember = Participant.of(group, member, Role.ADMIN);
 
         chatRoomService.addMember(
                 AddMemberReq.of(group.getChatRoomId(), member.getEmail(), member.getNickname()));
@@ -176,9 +176,9 @@ public class GroupAggregateService {
         List<Member> members = memberRepository.getAllByEmail(emails);
         Set<Long> existingMemberIds = groupMemberService.getExistingEmails(groupId, emails);
         // 각 유저 별 중복 체크 후 생성
-        List<GroupMember> newGroupMembers = members.stream()
+        List<Participant> newGroupMembers = members.stream()
                 .filter(member -> !existingMemberIds.contains(member.getId()))
-                .map(member -> GroupMember.of(group, member, Role.MEMBER))
+                .map(member -> Participant.of(group, member, Role.MEMBER))
                 .toList();
 
         // 중복 제거된 id와 nickname 맵 형성

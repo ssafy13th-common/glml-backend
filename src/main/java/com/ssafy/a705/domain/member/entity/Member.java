@@ -18,7 +18,6 @@ import org.hibernate.annotations.Comment;
 
 @Entity
 @Getter
-@Table(name = "members")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
 
@@ -47,7 +46,7 @@ public class Member extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    
+    // TODO: Change to MemberImage, Deprecated variable
     @Lob
     @Comment("회원 프로필 이미지 url")
     private String profileUrl;

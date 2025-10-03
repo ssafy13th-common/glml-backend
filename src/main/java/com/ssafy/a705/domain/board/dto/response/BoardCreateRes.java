@@ -1,6 +1,6 @@
 package com.ssafy.a705.domain.board.dto.response;
 
-import com.ssafy.a705.domain.board.entity.CompanyBoard;
+import com.ssafy.a705.domain.board.entity.Post;
 
 public record BoardCreateRes(
         Long id,
@@ -11,7 +11,7 @@ public record BoardCreateRes(
         String authorEmail
 ) {
 
-    public static BoardCreateRes from(CompanyBoard board) {
+    public static BoardCreateRes from(Post board) {
         return new BoardCreateRes(
                 board.getId(),
                 board.getTitle(),

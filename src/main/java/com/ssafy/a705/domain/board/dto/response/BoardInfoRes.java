@@ -1,6 +1,6 @@
 package com.ssafy.a705.domain.board.dto.response;
 
-import com.ssafy.a705.domain.board.entity.CompanyBoard;
+import com.ssafy.a705.domain.board.entity.Post;
 import java.time.LocalDate;
 
 public record BoardInfoRes(
@@ -12,7 +12,7 @@ public record BoardInfoRes(
         int comments
 ) {
 
-    public static BoardInfoRes from(CompanyBoard board) {
+    public static BoardInfoRes from(Post board) {
         String summary = board.getContent().length() > 100
                 ? board.getContent().substring(0, 100) + "..."
                 : board.getContent();
@@ -22,7 +22,7 @@ public record BoardInfoRes(
                 board.getMember().getNickname(),
                 summary,
                 board.getCreatedAt().toLocalDate(),
-                board.getCommentCount());
+                board.getReplyCount());
     }
 
 }

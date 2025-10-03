@@ -15,7 +15,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,7 +26,6 @@ import org.hibernate.annotations.Comment;
 
 @Entity
 @Getter
-@Table(name = "diaries")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Diary extends BaseEntity {
 

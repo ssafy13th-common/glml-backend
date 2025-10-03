@@ -1,6 +1,6 @@
 package com.ssafy.a705.domain.group._memo.service;
 
-import com.ssafy.a705.domain.group._member.entity.GroupMember;
+import com.ssafy.a705.domain.group._member.entity.Participant;
 import com.ssafy.a705.domain.group._member.service.GroupMemberService;
 import com.ssafy.a705.domain.group._memo.dto.request.GroupMemoReq;
 import com.ssafy.a705.domain.group._memo.dto.response.GroupMemoRes;
@@ -25,7 +25,7 @@ public class GroupMemoService {
     @Transactional
     public GroupMemoRes createMemo(Long groupId, GroupMemoReq groupMemoReq,
             CustomUserDetails customUserDetails) {
-        GroupMember currentMember = groupMemberService.memberAuthorityCheck(groupId,
+        Participant currentMember = groupMemberService.memberAuthorityCheck(groupId,
                 customUserDetails);
 
         GroupMemo newMemo = GroupMemo.of(groupMemoReq.content(), currentMember);
@@ -62,13 +62,13 @@ public class GroupMemoService {
     private GroupMemo memoAuthorityCheck(Long groupId, Long memoId,
             CustomUserDetails customUserDetails) {
         // 로그인 된 유저가 그룹 멤버인지 체크
-        GroupMember currentMember = groupMemberService.memberAuthorityCheck(groupId,
+        Participant currentMember = groupMemberService.memberAuthorityCheck(groupId,
                 customUserDetails);
 
         GroupMemo memo = groupMemoRepository.getGroupMemoById(memoId);
 
         // 현재 로그인된 유저가 메모 작성자인지 체크
-        if (memo.getGroupMember().getId() != currentMember.getId()) {
+        if (memo.getParticipant().getId() != currentMember.getId()) {
             throw new MemoAccessDeniedException();
         }
         return memo;

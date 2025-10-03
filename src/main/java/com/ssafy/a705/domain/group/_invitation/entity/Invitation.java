@@ -3,6 +3,7 @@ package com.ssafy.a705.domain.group._invitation.entity;
 import com.ssafy.a705.domain.group.entity.Group;
 import com.ssafy.a705.domain.member.entity.Member;
 import com.ssafy.a705.global.common.BaseEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -26,6 +27,7 @@ public class Invitation extends BaseEntity {
     private Long id;
 
     @Comment("초대 알림 제목")
+    @Column(length = 100)
     private String title;
 
     @Comment("초대 알림 본문")

@@ -1,8 +1,8 @@
-package com.ssafy.a705.domain.board._comment.entity;
+package com.ssafy.a705.domain.board._reply.entity;
 
-import com.ssafy.a705.domain.board._comment.dto.request.CommentRegisterReq;
-import com.ssafy.a705.domain.board._comment.dto.request.CommentUpdateReq;
-import com.ssafy.a705.domain.board.entity.CompanyBoard;
+import com.ssafy.a705.domain.board._reply.dto.request.CommentRegisterReq;
+import com.ssafy.a705.domain.board._reply.dto.request.CommentUpdateReq;
+import com.ssafy.a705.domain.board.entity.Post;
 import com.ssafy.a705.domain.member.entity.Member;
 import com.ssafy.a705.global.common.BaseEntity;
 import jakarta.persistence.Entity;
@@ -12,7 +12,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -21,9 +20,8 @@ import org.hibernate.annotations.Comment;
 
 @Entity
 @Getter
-@Table(name = "company_comments")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CompanyComment extends BaseEntity {
+public class Reply extends BaseEntity {
 
     @Id
     @Comment("댓글 식별자")
@@ -34,8 +32,8 @@ public class CompanyComment extends BaseEntity {
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id", nullable = false)
-    private CompanyBoard companyBoard;
+    @JoinColumn(name = "post_id", nullable = false)
+    private Post post;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", nullable = false)
@@ -43,26 +41,26 @@ public class CompanyComment extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
-    private CompanyComment parent;
+    private Reply parent;
 
-    private CompanyComment(String content, CompanyBoard companyBoard, Member member,
-            CompanyComment parent) {
+    private Reply(String content, Post post, Member member,
+            Reply parent) {
         this.content = content;
-        this.companyBoard = companyBoard;
+        this.post = post;
         this.member = member;
         this.parent = parent;
     }
 
-    public static CompanyComment from(CommentRegisterReq commentReq, CompanyBoard board,
-            Member member, CompanyComment parent) {
-        return new CompanyComment(commentReq.content(), board, member, parent);
+    public static Reply from(CommentRegisterReq commentReq, Post board,
+            Member member, Reply parent) {
+        return new Reply(commentReq.content(), board, member, parent);
     }
 
-    public void updateComment(CommentUpdateReq commentUpdateReq) {
+    public void updateContent(CommentUpdateReq commentUpdateReq) {
         this.content = commentUpdateReq.content();
     }
 
-    public void deleteComment() {
+    public void deleteReply() {
         this.delete(LocalDateTime.now());
     }
 }

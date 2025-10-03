@@ -11,7 +11,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -20,7 +19,6 @@ import org.hibernate.annotations.Comment;
 
 @Entity
 @Getter
-@Table(name = "diary_images")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class DiaryImage extends BaseEntity {
 
@@ -30,21 +28,21 @@ public class DiaryImage extends BaseEntity {
     private Long id;
 
     @Lob
-    @Comment("사진 URL")
+    @Comment("이미지 URL")
     @Column(nullable = false)
-    private String imageUrl;
+    private String url;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "diary_id", nullable = false)
     private Diary diary;
 
-    private DiaryImage(String imageUrl, Diary diary) {
-        this.imageUrl = imageUrl;
+    private DiaryImage(String url, Diary diary) {
+        this.url = url;
         this.diary = diary;
     }
 
-    public static DiaryImage of(String imageUrl, Diary diary) {
-        return new DiaryImage(imageUrl, diary);
+    public static DiaryImage of(String url, Diary diary) {
+        return new DiaryImage(url, diary);
     }
 
     public void deleteDiaryImage() {

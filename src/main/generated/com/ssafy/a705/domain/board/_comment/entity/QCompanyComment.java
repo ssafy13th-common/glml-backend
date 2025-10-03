@@ -1,4 +1,4 @@
-package com.ssafy.a705.domain.board._comment.entity;
+package com.ssafy.a705.domain.board._reply.entity;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 

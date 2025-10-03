@@ -1,4 +1,4 @@
-package com.ssafy.a705.domain.board._comment.exception;
+package com.ssafy.a705.domain.board._reply.exception;
 
 import com.ssafy.a705.global.common.exception.ApiException;
 import org.springframework.http.HttpStatus;

@@ -18,7 +18,7 @@ public record GroupInfoRes(
     public static GroupInfoRes from(Group group) {
         return new GroupInfoRes(group.getId(), group.getName(), group.getSummary(),
                 group.getChatRoomId(),
-                group.getGroupStatus(),
+                group.getStatus(),
                 group.getStartAt(), group.getEndAt(), group.getFeePerMinute());
     }
 }

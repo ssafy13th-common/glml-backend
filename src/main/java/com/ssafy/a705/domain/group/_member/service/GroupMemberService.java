@@ -4,7 +4,7 @@ import com.ssafy.a705.domain.group._member.dto.request.GroupMemberUpdateReq;
 import com.ssafy.a705.domain.group._member.dto.request.GroupMembersUpdateReq;
 import com.ssafy.a705.domain.group._member.dto.response.GroupMemberProfileRes;
 import com.ssafy.a705.domain.group._member.dto.response.GroupMembersRes;
-import com.ssafy.a705.domain.group._member.entity.GroupMember;
+import com.ssafy.a705.domain.group._member.entity.Participant;
 import com.ssafy.a705.domain.group._member.entity.Role;
 import com.ssafy.a705.domain.group._member.exception.UnauthorizedGroupMemberException;
 import com.ssafy.a705.domain.group._member.repository.GroupMemberRepository;
@@ -41,7 +41,7 @@ public class GroupMemberService {
     public GroupMembersRes getGroupMembers(Long groupId, CustomUserDetails customUserDetails) {
         memberAuthorityCheck(groupId, customUserDetails);
 
-        List<GroupMember> groupMembers = groupMemberRepository.findMembersByGroupId(groupId);
+        List<Participant> groupMembers = groupMemberRepository.findMembersByGroupId(groupId);
 
         if (!adminCheck(groupMembers)) {
             makeNewAdmin(groupMembers);
@@ -50,11 +50,11 @@ public class GroupMemberService {
         return GroupMembersRes.of(groupId, groupMembers);
     }
 
-    public List<GroupMember> getGroupMemberEntities(Long groupId,
+    public List<Participant> getGroupMemberEntities(Long groupId,
             CustomUserDetails customUserDetails) {
         memberAuthorityCheck(groupId, customUserDetails);
 
-        List<GroupMember> groupMembers = groupMemberRepository.findMembersByGroupId(groupId);
+        List<Participant> groupMembers = groupMemberRepository.findMembersByGroupId(groupId);
         return groupMembers;
     }
 
@@ -114,7 +114,7 @@ public class GroupMemberService {
             CustomUserDetails customUserDetails) {
         adminAuthorityCheck(groupId, customUserDetails);
         // 멤바 삭제
-        GroupMember member = groupMemberRepository.getByMemberEmailAndGroupId(groupId, email);
+        Participant member = groupMemberRepository.getByMemberEmailAndGroupId(groupId, email);
         member.deleteGroupMember();
     }
 
@@ -128,10 +128,10 @@ public class GroupMemberService {
                         GroupMemberUpdateReq -> GroupMemberUpdateReq)); // id와 GroupMemberUpdateReq 매핑
         List<Long> groupMemberIds = request.updateMembers().stream()
                 .map(GroupMemberUpdateReq::groupMemberId).toList();     // 일괄검색을 위한 groupMemberIds
-        List<GroupMember> groupMembers = groupMemberRepository.findGroupMembersByGroupMemberIds(
+        List<Participant> groupMembers = groupMemberRepository.findGroupMembersByGroupMemberIds(
                 groupMemberIds);    // DB에서 불러온 그룹 멤버 리스트
 
-        for (GroupMember groupMember : groupMembers) {
+        for (Participant groupMember : groupMembers) {
             GroupMemberUpdateReq groupMemberUpdate = groupMemberUpdateReqMap.get(
                     groupMember.getId()); // 업데이트 정보 불러오기
 
@@ -149,21 +149,21 @@ public class GroupMemberService {
         List<SettlementInfoRes> settlements = settlementReq.memberEmails().stream()
                 .map(memberEmail -> {
                     checkGroupMemberInGroup(groupId, memberEmail);
-                    GroupMember groupMember = groupMemberRepository.getByMemberEmailAndGroupId(
+                    Participant groupMember = groupMemberRepository.getByMemberEmailAndGroupId(
                             groupId, memberEmail);
                     groupMember.updateAmount(
-                            groupMember.getFinalAmount() + settlementReq.pricePerPerson(),
+                            groupMember.getFinalCost() + settlementReq.pricePerPerson(),
                             groupMember.getLateFee());
-                    return SettlementInfoRes.of(memberEmail, groupMember.getFinalAmount());
+                    return SettlementInfoRes.of(memberEmail, groupMember.getFinalCost());
                 }).toList();
         return SettlementRes.of(settlements);
     }
 
     @Transactional
     public void updateGroupMemberLateFee(Long groupId, Integer lateFee, String memberEmail) {
-        GroupMember groupMember = groupMemberRepository.getByMemberEmailAndGroupId(
+        Participant groupMember = groupMemberRepository.getByMemberEmailAndGroupId(
                 groupId, memberEmail);
-        groupMember.updateAmount(groupMember.getFinalAmount(), groupMember.getLateFee() + lateFee);
+        groupMember.updateAmount(groupMember.getFinalCost(), groupMember.getLateFee() + lateFee);
     }
 
     /**
@@ -174,7 +174,7 @@ public class GroupMemberService {
      */
     @Transactional(readOnly = true)
     public void adminAuthorityCheck(Long groupId, CustomUserDetails customUserDetails) {
-        GroupMember currentMember = memberAuthorityCheck(groupId, customUserDetails);
+        Participant currentMember = memberAuthorityCheck(groupId, customUserDetails);
         if (currentMember.getRole() != Role.ADMIN) { // 그룹 내의 역할 검증
             throw new UnauthorizedGroupMemberException();
         }
@@ -182,7 +182,7 @@ public class GroupMemberService {
 
     @Transactional(readOnly = true)
     public void checkGroupMemberInGroup(Long groupId, String memberEmail) {
-        GroupMember groupMember = groupMemberRepository.getByMemberEmailAndGroupId(
+        Participant groupMember = groupMemberRepository.getByMemberEmailAndGroupId(
                 groupId, memberEmail);
         if (Objects.isNull(groupMember)) {
             throw new GroupAccessDeniedException();
@@ -197,8 +197,8 @@ public class GroupMemberService {
      * @return 그룹에 속한 멤버라면, 해당 멤버 반환
      */
     @Transactional(readOnly = true)
-    public GroupMember memberAuthorityCheck(Long groupId, CustomUserDetails customUserDetails) {
-        GroupMember currentMember = groupMemberRepository.getByMemberIdAndGroupId(
+    public Participant memberAuthorityCheck(Long groupId, CustomUserDetails customUserDetails) {
+        Participant currentMember = groupMemberRepository.getByMemberIdAndGroupId(
                 customUserDetails.getId(), groupId);
 
         if (currentMember == null) {
@@ -208,17 +208,17 @@ public class GroupMemberService {
     }
 
     @Transactional
-    public void saveMember(GroupMember groupMember) {
+    public void saveMember(Participant groupMember) {
         groupMemberRepository.save(groupMember);
     }
 
     @Transactional
-    public void saveAllMembers(List<GroupMember> groupMembers) {
+    public void saveAllMembers(List<Participant> groupMembers) {
         groupMemberRepository.saveAll(groupMembers);
     }
 
-    public boolean adminCheck(List<GroupMember> groupMembers) {
-        for (GroupMember gm : groupMembers) {
+    public boolean adminCheck(List<Participant> groupMembers) {
+        for (Participant gm : groupMembers) {
             if (gm.getRole() == Role.ADMIN) {
                 return true;
             }
@@ -227,8 +227,8 @@ public class GroupMemberService {
         return false;
     }
 
-    public void makeNewAdmin(List<GroupMember> groupMembers) {
-        GroupMember groupMember = groupMembers.get(0);
+    public void makeNewAdmin(List<Participant> groupMembers) {
+        Participant groupMember = groupMembers.get(0);
         groupMember.upgradeToAdmin();
     }
 }

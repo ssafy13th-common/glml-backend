@@ -12,7 +12,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -21,7 +20,6 @@ import org.hibernate.annotations.Comment;
 
 @Entity
 @Getter
-@Table(name = "location_colors")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LocationColor extends BaseEntity {
 

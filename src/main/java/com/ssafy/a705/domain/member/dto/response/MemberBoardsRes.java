@@ -1,6 +1,6 @@
 package com.ssafy.a705.domain.member.dto.response;
 
-import com.ssafy.a705.domain.board.entity.CompanyBoard;
+import com.ssafy.a705.domain.board.entity.Post;
 import java.util.List;
 import org.springframework.data.domain.Page;
 
@@ -12,7 +12,7 @@ public record MemberBoardsRes(
         int totalPages
 ) {
 
-    public static MemberBoardsRes from(Page<CompanyBoard> boards) {
+    public static MemberBoardsRes from(Page<Post> boards) {
         return new MemberBoardsRes(boards.stream()
                 .map(MemberBoard::from).toList(),
                 boards.getNumber(),

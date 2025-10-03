@@ -1,10 +1,10 @@
-package com.ssafy.a705.domain.board._comment.service;
+package com.ssafy.a705.domain.board._reply.service;
 
-import com.ssafy.a705.domain.board._comment.dto.request.CommentRegisterReq;
-import com.ssafy.a705.domain.board._comment.dto.request.CommentUpdateReq;
-import com.ssafy.a705.domain.board._comment.entity.CompanyComment;
-import com.ssafy.a705.domain.board._comment.repository.CompanyCommentRepository;
-import com.ssafy.a705.domain.board.entity.CompanyBoard;
+import com.ssafy.a705.domain.board._reply.dto.request.CommentRegisterReq;
+import com.ssafy.a705.domain.board._reply.dto.request.CommentUpdateReq;
+import com.ssafy.a705.domain.board._reply.entity.Reply;
+import com.ssafy.a705.domain.board._reply.repository.CompanyCommentRepository;
+import com.ssafy.a705.domain.board.entity.Post;
 import com.ssafy.a705.domain.board.service.BoardService;
 import com.ssafy.a705.domain.member.entity.Member;
 import com.ssafy.a705.domain.member.repository.MemberRepository;
@@ -29,10 +29,10 @@ public class CommentService {
     public void createComment(Long boardId, CommentRegisterReq commentReq,
             CustomUserDetails userDetails) {
         Member member = memberRepository.getById(userDetails.getId());
-        CompanyBoard board = boardService.getBoardById(boardId);
-        CompanyComment parent = commentRepository.findByIdAndCompanyBoard(commentReq.parentId(),
+        Post board = boardService.getBoardById(boardId);
+        Reply parent = commentRepository.findByIdAndCompanyBoard(commentReq.parentId(),
                 board).orElse(null);
-        CompanyComment comment = CompanyComment.from(commentReq, board, member, parent);
+        Reply comment = Reply.from(commentReq, board, member, parent);
         commentRepository.save(comment);
     }
 
@@ -40,26 +40,26 @@ public class CommentService {
     public void updateComment(Long boardId, Long commentId, CommentUpdateReq commentUpdateReq,
             CustomUserDetails userDetails) {
         Member member = memberRepository.getById(userDetails.getId());
-        CompanyBoard board = boardService.getBoardById(boardId);
-        CompanyComment comment = commentRepository.getByIdAndCompanyBoard(commentId, board);
+        Post board = boardService.getBoardById(boardId);
+        Reply comment = commentRepository.getByIdAndCompanyBoard(commentId, board);
         checkMemberCanEdit(member, comment);
-        comment.updateComment(commentUpdateReq);
+        comment.updateContent(commentUpdateReq);
     }
 
     @Transactional
     public void deleteComment(Long boardId, Long commentId, CustomUserDetails userDetails) {
         Member member = memberRepository.getById(userDetails.getId());
-        CompanyBoard board = boardService.getBoardById(boardId);
-        CompanyComment comment = commentRepository.getByIdAndCompanyBoard(commentId, board);
+        Post board = boardService.getBoardById(boardId);
+        Reply comment = commentRepository.getByIdAndCompanyBoard(commentId, board);
         checkMemberCanEdit(member, comment);
-        comment.deleteComment();
+        comment.deleteReply();
     }
 
-    public Page<CompanyComment> getMemberComments(Member member, Pageable pageable) {
+    public Page<Reply> getMemberComments(Member member, Pageable pageable) {
         return commentRepository.findAllByMemberNotDeleted(member, pageable);
     }
 
-    private void checkMemberCanEdit(Member member, CompanyComment comment) {
+    private void checkMemberCanEdit(Member member, Reply comment) {
         if (!Objects.equals(member, comment.getMember())) {
             throw new ForbiddenException("댓글 접근");
         }

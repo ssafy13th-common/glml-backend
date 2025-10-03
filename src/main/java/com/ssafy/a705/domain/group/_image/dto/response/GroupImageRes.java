@@ -12,7 +12,7 @@ public record GroupImageRes(
         return new GroupImageRes(
                 groupImage.getId(),
                 url,
-                groupImage.getGroupMember().getMember().getEmail()
+                groupImage.getParticipant().getMember().getEmail()
         );
     }
 

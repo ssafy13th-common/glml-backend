@@ -1,6 +1,6 @@
 package com.ssafy.a705.domain.member.dto.response;
 
-import com.ssafy.a705.domain.board._comment.entity.CompanyComment;
+import com.ssafy.a705.domain.board._reply.entity.Reply;
 import java.util.List;
 import org.springframework.data.domain.Page;
 
@@ -12,7 +12,7 @@ public record MemberCommentsRes(
         int totalPages
 ) {
 
-    public static MemberCommentsRes from(Page<CompanyComment> comments) {
+    public static MemberCommentsRes from(Page<Reply> comments) {
         return new MemberCommentsRes(
                 comments.stream()
                         .map(MemberComment::from)

@@ -1,8 +1,8 @@
 package com.ssafy.a705.domain.member.service;
 
-import com.ssafy.a705.domain.board._comment.entity.CompanyComment;
-import com.ssafy.a705.domain.board._comment.service.CommentService;
-import com.ssafy.a705.domain.board.entity.CompanyBoard;
+import com.ssafy.a705.domain.board._reply.entity.Reply;
+import com.ssafy.a705.domain.board._reply.service.CommentService;
+import com.ssafy.a705.domain.board.entity.Post;
 import com.ssafy.a705.domain.board.service.BoardService;
 import com.ssafy.a705.domain.member.dto.request.UpdateNicknameReq;
 import com.ssafy.a705.domain.member.dto.request.UpdateProfileReq;
@@ -40,7 +40,7 @@ public class MemberService {
         Member member = memberRepository.getById(userDetails.getId());
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
                 Sort.by("id").descending());
-        Page<CompanyBoard> boards = boardService.getMemberBoard(member, pageable);
+        Page<Post> boards = boardService.getMemberBoard(member, pageable);
         return MemberBoardsRes.from(boards);
     }
 
@@ -49,7 +49,7 @@ public class MemberService {
         Member member = memberRepository.getById(userDetails.getId());
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
                 Sort.by("id").descending());
-        Page<CompanyComment> comments = commentService.getMemberComments(member, pageable);
+        Page<Reply> comments = commentService.getMemberComments(member, pageable);
         return MemberCommentsRes.from(comments);
     }
 

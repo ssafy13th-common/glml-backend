@@ -1,6 +1,6 @@
 package com.ssafy.a705.domain.group._member.dto.response;
 
-import com.ssafy.a705.domain.group._member.entity.GroupMember;
+import com.ssafy.a705.domain.group._member.entity.Participant;
 import com.ssafy.a705.domain.group._member.entity.Role;
 
 public record GroupMemberInfoRes(
@@ -12,12 +12,12 @@ public record GroupMemberInfoRes(
         int lateFee
 ) {
 
-    public static GroupMemberInfoRes from(GroupMember groupMember) {
+    public static GroupMemberInfoRes from(Participant groupMember) {
         return new GroupMemberInfoRes(groupMember.getId(),
                 groupMember.getRole(),
                 groupMember.getMember().getProfileUrl(),
                 groupMember.getMember().getNickname(),
-                groupMember.getFinalAmount(),
+                groupMember.getFinalCost(),
                 groupMember.getLateFee());
     }
 }
