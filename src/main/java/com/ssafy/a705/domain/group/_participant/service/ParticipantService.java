@@ -28,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class ParticipantService {
 
     private final ParticipantRepository participantRepository;
-    private final MemberRepository memberRepository;
 
     /**
      * 그룹 멤버 목록 조회

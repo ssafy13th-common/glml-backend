@@ -67,21 +67,7 @@ public class Group extends BaseEntity {
     @Comment("분당 지각비")
     private int feePerMinute;
 
-    private Group(String name, String summary, LocalDateTime gatheringTime,
-            String gatheringLocation, LocalDate startAt, LocalDate endAt, int feePerMinute) {
-        this.name = name;
-        this.status = GroupStatus.TO_DO;
-        this.summary = summary;
-        this.gatheringTime = gatheringTime;
-        this.gatheringLocation = gatheringLocation;
-        this.locationLatitude = locationLatitude;
-        this.locationLongitude = locationLongitude;
-        this.startAt = startAt;
-        this.endAt = endAt;
-        this.feePerMinute = feePerMinute;
-    }
-
-    private Group(String name,  String summary) {
+    private Group(String name, String summary) {
         this.name = name;
         this.status = GroupStatus.TO_DO;
         this.summary = summary;

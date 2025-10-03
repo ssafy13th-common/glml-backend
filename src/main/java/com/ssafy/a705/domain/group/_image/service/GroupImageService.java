@@ -22,8 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class GroupImageService {
-
-    private final GroupService groupService;
+    
     private final S3PresignedUploader uploader;
     private final GroupImageRepository imageRepository;
     private final ParticipantService participantService;
