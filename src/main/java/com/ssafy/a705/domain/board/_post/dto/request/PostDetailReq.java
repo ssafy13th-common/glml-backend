@@ -1,8 +1,8 @@
-package com.ssafy.a705.domain.board.dto.request;
+package com.ssafy.a705.domain.board._post.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 
-public record BoardDetailReq(
+public record PostDetailReq(
         @NotBlank(message = "제목이 입력되지 않았습니다.")
         String title,
 

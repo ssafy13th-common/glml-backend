@@ -1,6 +1,6 @@
 package com.ssafy.a705.domain.member.dto.response;
 
-import com.ssafy.a705.domain.board.entity.Post;
+import com.ssafy.a705.domain.board._post.entity.Post;
 
 public record MemberBoard(
         Long boardId,

@@ -1,6 +1,6 @@
-package com.ssafy.a705.domain.board.entity;
+package com.ssafy.a705.domain.board._post.entity;
 
-import com.ssafy.a705.domain.board.dto.request.BoardDetailReq;
+import com.ssafy.a705.domain.board._post.dto.request.PostDetailReq;
 import com.ssafy.a705.domain.member.entity.Member;
 import com.ssafy.a705.global.common.BaseEntity;
 import jakarta.persistence.Entity;
@@ -46,11 +46,11 @@ public class Post extends BaseEntity {
         this.member = member;
     }
 
-    public static Post from(BoardDetailReq boardReq, Member member) {
+    public static Post from(PostDetailReq boardReq, Member member) {
         return new Post(boardReq.title(), boardReq.content(), member);
     }
 
-    public void update(BoardDetailReq boardReq) {
+    public void update(PostDetailReq boardReq) {
         this.title = boardReq.title();
         this.content = boardReq.content();
     }

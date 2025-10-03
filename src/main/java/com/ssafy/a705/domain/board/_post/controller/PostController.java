@@ -1,10 +1,10 @@
-package com.ssafy.a705.domain.board.controller;
+package com.ssafy.a705.domain.board._post.controller;
 
-import com.ssafy.a705.domain.board.dto.request.BoardDetailReq;
-import com.ssafy.a705.domain.board.dto.response.BoardCreateRes;
-import com.ssafy.a705.domain.board.dto.response.BoardDetailRes;
-import com.ssafy.a705.domain.board.dto.response.BoardInfosRes;
-import com.ssafy.a705.domain.board.service.BoardService;
+import com.ssafy.a705.domain.board._post.dto.request.PostDetailReq;
+import com.ssafy.a705.domain.board._post.dto.response.PostCreateRes;
+import com.ssafy.a705.domain.board._post.dto.response.PostDetailRes;
+import com.ssafy.a705.domain.board._post.dto.response.PostInfosRes;
+import com.ssafy.a705.domain.board._post.service.PostService;
 import com.ssafy.a705.global.common.controller.ApiResponse;
 import com.ssafy.a705.global.security.login.dto.CustomUserDetails;
 import jakarta.validation.Valid;
@@ -23,53 +23,53 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/boards")
-public class BoardRestController {
+@RequestMapping("/api/v1/posts")
+public class PostController {
 
-    private final BoardService boardService;
+    private final PostService postService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<BoardCreateRes>> createBoard(
-            @RequestBody @Valid BoardDetailReq boardCreateReq,
+    public ResponseEntity<ApiResponse<PostCreateRes>> createPost(
+            @RequestBody @Valid PostDetailReq postCreateReq,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        BoardCreateRes res = boardService.createBoard(boardCreateReq, userDetails);
+        PostCreateRes res = postService.createPost(postCreateReq, userDetails);
         return ApiResponse.create(res);
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<BoardInfosRes>> getBoards(
+    public ResponseEntity<ApiResponse<PostInfosRes>> getPosts(
             @RequestParam(required = false) Long cursorId
     ) {
-        BoardInfosRes res = boardService.getBoards(cursorId);
+        PostInfosRes res = postService.getPosts(cursorId);
         return ApiResponse.ok(res);
     }
 
-    @GetMapping("/{board-id}")
-    public ResponseEntity<ApiResponse<BoardDetailRes>> getBoard(
-            @PathVariable("board-id") Long boardId,
+    @GetMapping("/{post-id}")
+    public ResponseEntity<ApiResponse<PostDetailRes>> getPost(
+            @PathVariable("post-id") Long postId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        BoardDetailRes res = boardService.getBoard(boardId, userDetails);
+        PostDetailRes res = postService.getPost(postId, userDetails);
         return ApiResponse.ok(res);
     }
 
-    @PutMapping("/{board-id}")
-    public ResponseEntity<ApiResponse<Void>> updateBoard(
-            @PathVariable("board-id") Long boardId,
-            @RequestBody @Valid BoardDetailReq boardReq,
+    @PutMapping("/{post-id}")
+    public ResponseEntity<ApiResponse<Void>> updatePost(
+            @PathVariable("post-id") Long postId,
+            @RequestBody @Valid PostDetailReq postReq,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        boardService.updateBoard(boardId, boardReq, userDetails);
+        postService.updatePost(postId, postReq, userDetails);
         return ApiResponse.ok();
     }
 
-    @DeleteMapping("/{board-id}")
-    public ResponseEntity<ApiResponse<Void>> deleteBoard(
-            @PathVariable("board-id") Long boardId,
+    @DeleteMapping("/{post-id}")
+    public ResponseEntity<ApiResponse<Void>> deletePost(
+            @PathVariable("post-id") Long postId,
             @AuthenticationPrincipal CustomUserDetails userDetails
     ) {
-        boardService.deleteBoard(boardId, userDetails);
+        postService.deletePost(postId, userDetails);
         return ApiResponse.ok();
     }
 

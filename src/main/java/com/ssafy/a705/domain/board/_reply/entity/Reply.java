@@ -2,7 +2,7 @@ package com.ssafy.a705.domain.board._reply.entity;
 
 import com.ssafy.a705.domain.board._reply.dto.request.CommentRegisterReq;
 import com.ssafy.a705.domain.board._reply.dto.request.CommentUpdateReq;
-import com.ssafy.a705.domain.board.entity.Post;
+import com.ssafy.a705.domain.board._post.entity.Post;
 import com.ssafy.a705.domain.member.entity.Member;
 import com.ssafy.a705.global.common.BaseEntity;
 import jakarta.persistence.Entity;

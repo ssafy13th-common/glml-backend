@@ -48,7 +48,7 @@ public class SecurityConfig {
             "/swagger-ui/**", "/v3/api-docs/**", "/swagger-resources/**", "/webjars/**"
     };
     private static final String[] DOMAIN_URLS = {
-            "/api/v1/boards", "/api/v1/locations", "/api/v1/groups"
+            "/api/v1/posts", "/api/v1/locations", "/api/v1/groups"
     };
     private static final String KAKAO_TOKEN_URL = "/api/v1/auth/kakao/**";
     private static final String LOGOUT_URL = "/api/v1/auth/logout";

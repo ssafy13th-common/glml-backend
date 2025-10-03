@@ -4,8 +4,8 @@ import com.ssafy.a705.domain.board._reply.dto.request.CommentRegisterReq;
 import com.ssafy.a705.domain.board._reply.dto.request.CommentUpdateReq;
 import com.ssafy.a705.domain.board._reply.entity.Reply;
 import com.ssafy.a705.domain.board._reply.repository.CompanyCommentRepository;
-import com.ssafy.a705.domain.board.entity.Post;
-import com.ssafy.a705.domain.board.service.BoardService;
+import com.ssafy.a705.domain.board._post.entity.Post;
+import com.ssafy.a705.domain.board._post.service.PostService;
 import com.ssafy.a705.domain.member.entity.Member;
 import com.ssafy.a705.domain.member.repository.MemberRepository;
 import com.ssafy.a705.global.common.exception.ForbiddenException;
@@ -22,14 +22,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommentService {
 
     private final MemberRepository memberRepository;
-    private final BoardService boardService;
+    private final PostService postService;
     private final CompanyCommentRepository commentRepository;
 
     @Transactional
     public void createComment(Long boardId, CommentRegisterReq commentReq,
             CustomUserDetails userDetails) {
         Member member = memberRepository.getById(userDetails.getId());
-        Post board = boardService.getBoardById(boardId);
+        Post board = postService.getPostById(boardId);
         Reply parent = commentRepository.findByIdAndCompanyBoard(commentReq.parentId(),
                 board).orElse(null);
         Reply comment = Reply.from(commentReq, board, member, parent);
@@ -40,7 +40,7 @@ public class CommentService {
     public void updateComment(Long boardId, Long commentId, CommentUpdateReq commentUpdateReq,
             CustomUserDetails userDetails) {
         Member member = memberRepository.getById(userDetails.getId());
-        Post board = boardService.getBoardById(boardId);
+        Post board = postService.getPostById(boardId);
         Reply comment = commentRepository.getByIdAndCompanyBoard(commentId, board);
         checkMemberCanEdit(member, comment);
         comment.updateContent(commentUpdateReq);
@@ -49,7 +49,7 @@ public class CommentService {
     @Transactional
     public void deleteComment(Long boardId, Long commentId, CustomUserDetails userDetails) {
         Member member = memberRepository.getById(userDetails.getId());
-        Post board = boardService.getBoardById(boardId);
+        Post board = postService.getPostById(boardId);
         Reply comment = commentRepository.getByIdAndCompanyBoard(commentId, board);
         checkMemberCanEdit(member, comment);
         comment.deleteReply();

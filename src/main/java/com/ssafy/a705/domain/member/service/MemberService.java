@@ -2,8 +2,8 @@ package com.ssafy.a705.domain.member.service;
 
 import com.ssafy.a705.domain.board._reply.entity.Reply;
 import com.ssafy.a705.domain.board._reply.service.CommentService;
-import com.ssafy.a705.domain.board.entity.Post;
-import com.ssafy.a705.domain.board.service.BoardService;
+import com.ssafy.a705.domain.board._post.entity.Post;
+import com.ssafy.a705.domain.board._post.service.PostService;
 import com.ssafy.a705.domain.member.dto.request.UpdateNicknameReq;
 import com.ssafy.a705.domain.member.dto.request.UpdateProfileReq;
 import com.ssafy.a705.domain.member.dto.response.MemberBoardsRes;
@@ -30,7 +30,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final BoardService boardService;
+    private final PostService postService;
     private final S3PresignedUploader uploader;
     private final CommentService commentService;
     private final MemberRepository memberRepository;
@@ -40,7 +40,7 @@ public class MemberService {
         Member member = memberRepository.getById(userDetails.getId());
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(),
                 Sort.by("id").descending());
-        Page<Post> boards = boardService.getMemberBoard(member, pageable);
+        Page<Post> boards = postService.getMemberPost(member, pageable);
         return MemberBoardsRes.from(boards);
     }
 
