@@ -8,7 +8,6 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.security.SecurityScheme.In;
 import io.swagger.v3.oas.models.security.SecurityScheme.Type;
 import io.swagger.v3.oas.models.servers.Server;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,25 +17,12 @@ public class SwaggerConfig {
     private static final String SCHEMA_NAME = "Authorization";
 
     @Bean
-    public OpenAPI openAPI(HttpServletRequest request) {
-        String scheme = request.getHeader("X-Forwarded-Proto");
-        if (scheme == null || scheme.isEmpty()) {
-            scheme = request.getScheme(); // 없으면 기본 scheme 사용
-        }
-
-        String host = request.getHeader("X-Forwarded-Host");
-        if (host == null || host.isEmpty()) {
-            host = request.getServerName();
-        }
-
-        int port = request.getServerPort();
-        String url = scheme + "://" + host + ((port == 80 || port == 443) ? "" : ":" + port);
-
+    public OpenAPI openAPI() {
         return new OpenAPI()
                 .info(apiInfo())
                 .components(appAuthorization())
                 .addSecurityItem(security())
-                .addServersItem(new Server().url(url));
+                .addServersItem(new Server().url("https://glml.store"));
     }
 
     private Info apiInfo() {
