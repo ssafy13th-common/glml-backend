@@ -1,6 +1,6 @@
 package com.ssafy.a705.domain.group._receipt.controller;
 
-import com.ssafy.a705.domain.group._member.service.GroupMemberService;
+import com.ssafy.a705.domain.group._participant.service.ParticipantService;
 import com.ssafy.a705.domain.group._receipt.dto.request.OcrExecuteReq;
 import com.ssafy.a705.domain.group._receipt.dto.request.SettlementReq;
 import com.ssafy.a705.domain.group._receipt.dto.response.OcrExecuteRes;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/groups/{group-id}/receipts")
 public class ReceiptRestController {
 
-    private final GroupMemberService groupMemberService;
+    private final ParticipantService participantService;
     private final OcrJobService ocrJobService;
 
     @PostMapping
@@ -42,7 +42,7 @@ public class ReceiptRestController {
             @RequestBody @Valid SettlementReq settlementReq,
             @AuthenticationPrincipal
             CustomUserDetails userDetails) {
-        SettlementRes settlementRes = groupMemberService.updateGroupMembersFinalAmount(groupId,
+        SettlementRes settlementRes = participantService.updateParticipantsFinalAmount(groupId,
                 settlementReq, userDetails);
         return ApiResponse.ok(settlementRes);
     }

@@ -1,8 +1,6 @@
 package com.ssafy.a705.domain.group.dto.request;
 
-import com.ssafy.a705.domain.group.entity.GroupStatus;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 public record GroupReq(

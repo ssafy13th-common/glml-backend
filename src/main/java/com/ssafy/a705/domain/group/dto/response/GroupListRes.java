@@ -13,7 +13,7 @@ public record GroupListRes(
 ) {
 
     public static GroupListRes from(Group group, List<String> imageUrls) {
-        return new GroupListRes(group.getId(), group.getName(), group.getGroupStatus(),
+        return new GroupListRes(group.getId(), group.getName(), group.getStatus(),
                 group.getSummary(), imageUrls);
     }
 }

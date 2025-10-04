@@ -1,6 +1,6 @@
 package com.ssafy.a705.domain.group._memo.entity;
 
-import com.ssafy.a705.domain.group._member.entity.GroupMember;
+import com.ssafy.a705.domain.group._participant.entity.Participant;
 import com.ssafy.a705.global.common.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -9,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -18,7 +17,6 @@ import org.hibernate.annotations.Comment;
 
 @Entity
 @Getter
-@Table(name = "group_memos")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GroupMemo extends BaseEntity {
 
@@ -31,15 +29,15 @@ public class GroupMemo extends BaseEntity {
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "group_member_id", nullable = false)
-    private GroupMember groupMember;
+    @JoinColumn(name = "participant_id", nullable = false)
+    private Participant participant;
 
-    private GroupMemo(String content, GroupMember groupMember) {
+    private GroupMemo(String content, Participant participant) {
         this.content = content;
-        this.groupMember = groupMember;
+        this.participant = participant;
     }
 
-    public static GroupMemo of(String content, GroupMember groupMember) {
+    public static GroupMemo of(String content, Participant groupMember) {
         return new GroupMemo(content, groupMember);
     }
 

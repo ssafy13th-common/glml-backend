@@ -14,7 +14,7 @@ public interface GroupMemoRepository extends JpaRepository<GroupMemo, Long> {
     Optional<GroupMemo> findByIdAndDeletedAtIsNull(@NonNull Long id);
 
     @Query("SELECT gm FROM GroupMemo gm "
-            + "JOIN FETCH gm.groupMember mem "
+            + "JOIN FETCH gm.participant mem "
             + "JOIN FETCH mem.group g "
             + "WHERE g.id = :groupId "
             + "AND gm.deletedAt IS NULL "

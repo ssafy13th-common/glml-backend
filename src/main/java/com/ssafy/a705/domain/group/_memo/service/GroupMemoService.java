@@ -1,7 +1,7 @@
 package com.ssafy.a705.domain.group._memo.service;
 
-import com.ssafy.a705.domain.group._member.entity.GroupMember;
-import com.ssafy.a705.domain.group._member.service.GroupMemberService;
+import com.ssafy.a705.domain.group._participant.entity.Participant;
+import com.ssafy.a705.domain.group._participant.service.ParticipantService;
 import com.ssafy.a705.domain.group._memo.dto.request.GroupMemoReq;
 import com.ssafy.a705.domain.group._memo.dto.response.GroupMemoRes;
 import com.ssafy.a705.domain.group._memo.dto.response.GroupMemosRes;
@@ -19,13 +19,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class GroupMemoService {
 
     private final GroupMemoRepository groupMemoRepository;
-    private final GroupMemberService groupMemberService;
+    private final ParticipantService participantService;
 
     // 메모 생성
     @Transactional
     public GroupMemoRes createMemo(Long groupId, GroupMemoReq groupMemoReq,
             CustomUserDetails customUserDetails) {
-        GroupMember currentMember = groupMemberService.memberAuthorityCheck(groupId,
+        Participant currentMember = participantService.memberAuthorityCheck(groupId,
                 customUserDetails);
 
         GroupMemo newMemo = GroupMemo.of(groupMemoReq.content(), currentMember);
@@ -36,7 +36,7 @@ public class GroupMemoService {
     // 메모 전체 조회
     @Transactional(readOnly = true)
     public GroupMemosRes getMemos(Long groupId, CustomUserDetails customUserDetails) {
-        groupMemberService.memberAuthorityCheck(groupId, customUserDetails);
+        participantService.memberAuthorityCheck(groupId, customUserDetails);
 
         List<GroupMemo> memos = groupMemoRepository.findAllByGroupIdAndDeletedAtIsNull(groupId);
         return GroupMemosRes.of(groupId, memos);
@@ -62,13 +62,13 @@ public class GroupMemoService {
     private GroupMemo memoAuthorityCheck(Long groupId, Long memoId,
             CustomUserDetails customUserDetails) {
         // 로그인 된 유저가 그룹 멤버인지 체크
-        GroupMember currentMember = groupMemberService.memberAuthorityCheck(groupId,
+        Participant currentMember = participantService.memberAuthorityCheck(groupId,
                 customUserDetails);
 
         GroupMemo memo = groupMemoRepository.getGroupMemoById(memoId);
 
         // 현재 로그인된 유저가 메모 작성자인지 체크
-        if (memo.getGroupMember().getId() != currentMember.getId()) {
+        if (memo.getParticipant().getId() != currentMember.getId()) {
             throw new MemoAccessDeniedException();
         }
         return memo;

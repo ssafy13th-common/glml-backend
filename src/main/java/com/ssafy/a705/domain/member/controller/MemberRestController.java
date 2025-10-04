@@ -2,8 +2,8 @@ package com.ssafy.a705.domain.member.controller;
 
 import com.ssafy.a705.domain.member.dto.request.UpdateNicknameReq;
 import com.ssafy.a705.domain.member.dto.request.UpdateProfileReq;
-import com.ssafy.a705.domain.member.dto.response.MemberBoardsRes;
-import com.ssafy.a705.domain.member.dto.response.MemberCommentsRes;
+import com.ssafy.a705.domain.member.dto.response.MemberPostsRes;
+import com.ssafy.a705.domain.member.dto.response.MemberRepliesRes;
 import com.ssafy.a705.domain.member.dto.response.MemberDetailRes;
 import com.ssafy.a705.domain.member.dto.response.MemberInfosRes;
 import com.ssafy.a705.domain.member.service.MemberService;
@@ -29,22 +29,22 @@ public class MemberRestController {
 
     private final MemberService memberService;
 
-    @GetMapping("/mypage/boards")
-    public ResponseEntity<ApiResponse<MemberBoardsRes>> getMemberBoards(
+    @GetMapping("/mypage/posts")
+    public ResponseEntity<ApiResponse<MemberPostsRes>> getMemberBoards(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @PageableDefault Pageable pageable
     ) {
-        MemberBoardsRes boardsRes = memberService.getMemberBoards(userDetails, pageable);
-        return ApiResponse.ok(boardsRes);
+        MemberPostsRes postsRes = memberService.getMemberBoards(userDetails, pageable);
+        return ApiResponse.ok(postsRes);
     }
 
-    @GetMapping("/mypage/comments")
-    public ResponseEntity<ApiResponse<MemberCommentsRes>> getMemberComments(
+    @GetMapping("/mypage/replies")
+    public ResponseEntity<ApiResponse<MemberRepliesRes>> getMemberReplies(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @PageableDefault Pageable pageable
     ) {
-        MemberCommentsRes commentsRes = memberService.getMemberComments(userDetails, pageable);
-        return ApiResponse.ok(commentsRes);
+        MemberRepliesRes repliesRes = memberService.getMemberReplies(userDetails, pageable);
+        return ApiResponse.ok(repliesRes);
     }
 
     @GetMapping("/mypage/me")

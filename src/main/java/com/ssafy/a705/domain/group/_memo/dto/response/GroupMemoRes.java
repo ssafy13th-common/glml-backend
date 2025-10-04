@@ -9,6 +9,6 @@ public record GroupMemoRes(
 
     public static GroupMemoRes from(GroupMemo groupMemo) {
         return new GroupMemoRes(groupMemo.getId(), groupMemo.getContent(),
-                groupMemo.getGroupMember().getMember().getNickname());
+                groupMemo.getParticipant().getMember().getNickname());
     }
 }

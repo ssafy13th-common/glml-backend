@@ -17,10 +17,10 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
 
     Optional<Group> findByIdAndDeletedAtIsNull(@NonNull Long groupId);
 
-    @Query("SELECT g FROM GroupMember gm "
-            + "JOIN gm.group g "
-            + "WHERE gm.member.id = :memberId "
-            + "AND gm.deletedAt IS NULL "
+    @Query("SELECT g FROM Participant p "
+            + "JOIN p.group g "
+            + "WHERE p.member.id = :memberId "
+            + "AND p.deletedAt IS NULL "
             + "AND g.deletedAt IS NULL")
     List<Group> findGroupsByMemberId(@Param("memberId") Long memberId);
 
@@ -30,12 +30,12 @@ public interface GroupRepository extends JpaRepository<Group, Long> {
 
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query("update Group g set g.groupStatus = :status where g.startAt = :startAt")
+    @Query("update Group g set g.status = :status where g.startAt = :startAt")
     int updateStatusByStartAt(@Param("status") GroupStatus status, @Param("startAt") LocalDate startAt);
 
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query("update Group g set g.groupStatus = :status where g.endAt = :endAt")
+    @Query("update Group g set g.status = :status where g.endAt = :endAt")
     int updateStatusByEndAt(@Param("status") GroupStatus status, @Param("endAt") LocalDate endAt);
 
 }

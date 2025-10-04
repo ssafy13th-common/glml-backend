@@ -20,7 +20,7 @@ import org.hibernate.annotations.Comment;
 
 @Entity
 @Getter
-@Table(name = "`groups`")
+@Table(name = "`group`")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Group extends BaseEntity {
 
@@ -36,7 +36,7 @@ public class Group extends BaseEntity {
     @Comment("그룹 상태")
     @Column(nullable = false, length = 11)
     @Enumerated(EnumType.STRING)
-    private GroupStatus groupStatus;
+    private GroupStatus status;
 
     @Comment("그룹 설명")
     @Column(length = 100)
@@ -46,6 +46,7 @@ public class Group extends BaseEntity {
     private LocalDateTime gatheringTime;
 
     @Comment("모임 장소")
+    @Column(length = 100)
     private String gatheringLocation;
 
     @Comment("모임 장소 위도")
@@ -66,23 +67,9 @@ public class Group extends BaseEntity {
     @Comment("분당 지각비")
     private int feePerMinute;
 
-    private Group(String name, String summary, LocalDateTime gatheringTime,
-            String gatheringLocation, LocalDate startAt, LocalDate endAt, int feePerMinute) {
+    private Group(String name, String summary) {
         this.name = name;
-        this.groupStatus = GroupStatus.TO_DO;
-        this.summary = summary;
-        this.gatheringTime = gatheringTime;
-        this.gatheringLocation = gatheringLocation;
-        this.locationLatitude = locationLatitude;
-        this.locationLongitude = locationLongitude;
-        this.startAt = startAt;
-        this.endAt = endAt;
-        this.feePerMinute = feePerMinute;
-    }
-
-    private Group(String name,  String summary) {
-        this.name = name;
-        this.groupStatus = GroupStatus.TO_DO;
+        this.status = GroupStatus.TO_DO;
         this.summary = summary;
     }
 
@@ -102,11 +89,12 @@ public class Group extends BaseEntity {
         this.feePerMinute = groupReq.feePerMinute();
     }
 
+    public void updateChatRoomId(String chatRoomId) {
+        this.chatRoomId = chatRoomId;
+    }
+
     public void deleteGroup() {
         this.delete(LocalDateTime.now());
     }
 
-    public void updateChatRoomId(String chatRoomId) {
-        this.chatRoomId = chatRoomId;
-    }
 }

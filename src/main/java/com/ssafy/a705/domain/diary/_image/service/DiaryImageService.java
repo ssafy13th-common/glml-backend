@@ -35,7 +35,7 @@ public class DiaryImageService {
                 .min(Comparator.comparing(DiaryImage::getId));
         return firstImage
                 .map(diaryImage -> s3PresignedUploader.generatePresignedGetUrl(
-                        diaryImage.getImageUrl())).orElse(null);
+                        diaryImage.getUrl())).orElse(null);
     }
 
     public List<String> getDiaryImageUrls(Diary diary) {
@@ -43,7 +43,7 @@ public class DiaryImageService {
                 diary);
         return diaryImages.stream()
                 .map(diaryImage -> s3PresignedUploader.generatePresignedGetUrl(
-                        diaryImage.getImageUrl())).toList();
+                        diaryImage.getUrl())).toList();
     }
 
     @Transactional
@@ -52,10 +52,10 @@ public class DiaryImageService {
         List<DiaryImage> existingImages = diaryImageRepository.findAllByDiaryAndNotDeleted(
                 diary);
         List<DiaryImage> toDeleteImages = existingImages.stream()
-                .filter(image -> !keepImageUrls.contains(image.getImageUrl())).toList();
+                .filter(image -> !keepImageUrls.contains(image.getUrl())).toList();
         toDeleteImages.forEach(diaryImage -> {
             diaryImage.deleteDiaryImage();
-            s3Uploader.deleteFile(diaryImage.getImageUrl());
+            s3Uploader.deleteFile(diaryImage.getUrl());
         });
         List<DiaryImage> images = newImageUrls.stream()
                 .map(url -> DiaryImage.of(url, diary))
@@ -69,7 +69,7 @@ public class DiaryImageService {
                 diary);
         diaryImages.forEach(diaryImage -> {
             diaryImage.deleteDiaryImage();
-            s3Uploader.deleteFile(diaryImage.getImageUrl());
+            s3Uploader.deleteFile(diaryImage.getUrl());
         });
         diary.deleteDiary();
     }

@@ -35,7 +35,7 @@ public class QGroupMemo extends EntityPathBase<GroupMemo> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> deletedAt = _super.deletedAt;
 
-    public final com.ssafy.a705.domain.group._member.entity.QGroupMember groupMember;
+    public final com.ssafy.a705.domain.group._participant.entity.QGroupMember groupMember;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
@@ -60,7 +60,7 @@ public class QGroupMemo extends EntityPathBase<GroupMemo> {
 
     public QGroupMemo(Class<? extends GroupMemo> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.groupMember = inits.isInitialized("groupMember") ? new com.ssafy.a705.domain.group._member.entity.QGroupMember(forProperty("groupMember"), inits.get("groupMember")) : null;
+        this.groupMember = inits.isInitialized("groupMember") ? new com.ssafy.a705.domain.group._participant.entity.QGroupMember(forProperty("groupMember"), inits.get("groupMember")) : null;
     }
 
 }
