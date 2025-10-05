@@ -1,14 +1,14 @@
 package com.ssafy.a705.domain.member.service;
 
-import com.ssafy.a705.domain.board._reply.entity.Reply;
-import com.ssafy.a705.domain.board._reply.service.ReplyService;
-import com.ssafy.a705.domain.board._post.entity.Post;
-import com.ssafy.a705.domain.board._post.service.PostService;
+import com.ssafy.a705.board.domain.entity.Post;
+import com.ssafy.a705.board.domain.entity.Reply;
+import com.ssafy.a705.board.domain.service.PostService;
+import com.ssafy.a705.board.domain.service.ReplyService;
 import com.ssafy.a705.domain.member.dto.request.UpdateNicknameReq;
 import com.ssafy.a705.domain.member.dto.request.UpdateProfileReq;
-import com.ssafy.a705.domain.member.dto.response.MemberPostsRes;
 import com.ssafy.a705.domain.member.dto.response.MemberDetailRes;
 import com.ssafy.a705.domain.member.dto.response.MemberInfosRes;
+import com.ssafy.a705.domain.member.dto.response.MemberPostsRes;
 import com.ssafy.a705.domain.member.dto.response.MemberRepliesRes;
 import com.ssafy.a705.domain.member.entity.Member;
 import com.ssafy.a705.domain.member.exception.DuplicatedEmailException;

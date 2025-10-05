@@ -1,6 +1,6 @@
 package com.ssafy.a705.domain.member.dto.response;
 
-import com.ssafy.a705.domain.board._post.entity.Post;
+import com.ssafy.a705.board.domain.entity.Post;
 import java.util.List;
 import org.springframework.data.domain.Page;
 
