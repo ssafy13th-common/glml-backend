@@ -1,7 +1,7 @@
 package com.ssafy.a705.location.application;
 
-import com.ssafy.a705.domain.diary.exception.DiaryNotFoundException;
-import com.ssafy.a705.domain.diary.repository.DiaryRepository;
+import com.ssafy.a705.diary.domain.exception.DiaryNotFoundException;
+import com.ssafy.a705.diary.infrastructure.repository.DiaryJpaRepository;
 import com.ssafy.a705.domain.member.entity.Member;
 import com.ssafy.a705.domain.member.repository.MemberRepository;
 import com.ssafy.a705.global.security.login.dto.CustomUserDetails;
@@ -31,7 +31,7 @@ public class LocationColorApplicationService {
     private final LocationColorStore colorStore;
     private final LocationColorReader colorReader;
     private final MemberRepository memberRepository;
-    private final DiaryRepository diaryRepository;
+    private final DiaryJpaRepository diaryRepository;
 
     @Transactional
     public void updateLocationColor(Integer locationId, ColorUpdateReq colorReq,

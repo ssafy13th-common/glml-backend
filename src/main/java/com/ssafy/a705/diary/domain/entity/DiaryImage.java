@@ -1,0 +1,51 @@
+package com.ssafy.a705.diary.domain.entity;
+
+import com.ssafy.a705.global.common.BaseEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
+
+@Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class DiaryImage extends BaseEntity {
+
+    @Id
+    @Comment("다이어리 이미지 식별자")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Lob
+    @Comment("이미지 URL")
+    @Column(nullable = false)
+    private String url;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "diary_id", nullable = false)
+    private Diary diary;
+
+    private DiaryImage(String url, Diary diary) {
+        this.url = url;
+        this.diary = diary;
+    }
+
+    public static DiaryImage of(String url, Diary diary) {
+        return new DiaryImage(url, diary);
+    }
+
+    public void deleteDiaryImage() {
+        this.delete(LocalDateTime.now());
+    }
+
+}
