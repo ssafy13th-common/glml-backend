@@ -3,7 +3,7 @@ package com.ssafy.a705.domain.diary._image.service;
 import com.ssafy.a705.domain.diary._image.entity.DiaryImage;
 import com.ssafy.a705.domain.diary.entity.Diary;
 import com.ssafy.a705.domain.diary.repository.DiaryImageRepository;
-import com.ssafy.a705.global.common.utils.S3PresignedUploader;
+import com.ssafy.a705.global.common.utils.S3PresignedUrlGenerator;
 import com.ssafy.a705.global.common.utils.S3Uploader;
 import java.util.Comparator;
 import java.util.List;
@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class DiaryImageService {
 
     private final DiaryImageRepository diaryImageRepository;
-    private final S3PresignedUploader s3PresignedUploader;
+    private final S3PresignedUrlGenerator s3PresignedUploader;
     private final S3Uploader s3Uploader;
 
     @Transactional

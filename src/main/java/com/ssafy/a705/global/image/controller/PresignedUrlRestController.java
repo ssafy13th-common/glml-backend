@@ -1,7 +1,7 @@
 package com.ssafy.a705.global.image.controller;
 
 import com.ssafy.a705.global.common.controller.ApiResponse;
-import com.ssafy.a705.global.common.utils.S3PresignedUploader;
+import com.ssafy.a705.global.common.utils.S3PresignedUrlGenerator;
 import com.ssafy.a705.global.image.dto.request.PresignedUrlsReq;
 import com.ssafy.a705.global.image.dto.response.PresignedUrlRes;
 import com.ssafy.a705.global.image.dto.response.PresignedUrlsRes;
@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/images/presigned-urls")
 public class PresignedUrlRestController {
 
-    private final S3PresignedUploader s3PresignedUploader;
+    private final S3PresignedUrlGenerator s3PresignedUploader;
 
     @PostMapping
     public ResponseEntity<ApiResponse<PresignedUrlsRes>> getPresignedUrlsForImages(

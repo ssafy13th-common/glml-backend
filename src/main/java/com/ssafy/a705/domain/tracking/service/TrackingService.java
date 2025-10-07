@@ -12,7 +12,7 @@ import com.ssafy.a705.domain.tracking.dto.response.TrackingS3Url;
 import com.ssafy.a705.domain.tracking.entity.Tracking;
 import com.ssafy.a705.domain.tracking.repository.TrackingRepository;
 import com.ssafy.a705.global.common.exception.ForbiddenException;
-import com.ssafy.a705.global.common.utils.S3PresignedUploader;
+import com.ssafy.a705.global.common.utils.S3PresignedUrlGenerator;
 import com.ssafy.a705.global.security.login.dto.CustomUserDetails;
 import java.util.List;
 import java.util.Objects;
@@ -27,7 +27,7 @@ public class TrackingService {
     private final TrackingImageService imageService;
     private final MemberRepository memberRepository;
     private final TrackingRepository trackingRepository;
-    private final S3PresignedUploader uploader;
+    private final S3PresignedUrlGenerator uploader;
 
     @Transactional
     public TrackingCreateRes createTracking(TrackingCreateReq trackingCreateReq,

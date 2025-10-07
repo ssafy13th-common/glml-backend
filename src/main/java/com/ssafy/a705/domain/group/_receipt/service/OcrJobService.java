@@ -9,7 +9,7 @@ import com.ssafy.a705.domain.group._receipt.dto.response.ReceiptItem;
 import com.ssafy.a705.domain.group._receipt.exception.FlaskApiException;
 import com.ssafy.a705.domain.group._receipt.exception.FlaskException;
 import com.ssafy.a705.domain.group._receipt.exception.FlaskTimeoutException;
-import com.ssafy.a705.global.common.utils.S3PresignedUploader;
+import com.ssafy.a705.global.common.utils.S3PresignedUrlGenerator;
 import com.ssafy.a705.global.security.login.dto.CustomUserDetails;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ import org.springframework.web.client.RestTemplate;
 public class OcrJobService {
 
     private final RestTemplate restTemplate;
-    private final S3PresignedUploader presignedUploader;
+    private final S3PresignedUrlGenerator presignedUploader;
 
     @Value("${ocr.downstream.flask-base-url}")
     private String flaskBaseUrl;

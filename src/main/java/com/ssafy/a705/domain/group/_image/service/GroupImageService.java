@@ -7,9 +7,8 @@ import com.ssafy.a705.domain.group._image.entity.GroupImage;
 import com.ssafy.a705.domain.group._image.repository.GroupImageRepository;
 import com.ssafy.a705.domain.group._participant.entity.Participant;
 import com.ssafy.a705.domain.group._participant.service.ParticipantService;
-import com.ssafy.a705.domain.group.service.GroupService;
 import com.ssafy.a705.global.common.exception.ForbiddenException;
-import com.ssafy.a705.global.common.utils.S3PresignedUploader;
+import com.ssafy.a705.global.common.utils.S3PresignedUrlGenerator;
 import com.ssafy.a705.global.security.login.dto.CustomUserDetails;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +21,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class GroupImageService {
-    
-    private final S3PresignedUploader uploader;
+
+    private final S3PresignedUrlGenerator uploader;
     private final GroupImageRepository imageRepository;
     private final ParticipantService participantService;
 

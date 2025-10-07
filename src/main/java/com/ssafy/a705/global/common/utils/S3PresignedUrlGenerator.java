@@ -20,7 +20,7 @@ import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequ
 
 @Component
 @RequiredArgsConstructor
-public class S3PresignedUploader {
+public class S3PresignedUrlGenerator {
 
     private final S3Presigner s3Presigner;
 

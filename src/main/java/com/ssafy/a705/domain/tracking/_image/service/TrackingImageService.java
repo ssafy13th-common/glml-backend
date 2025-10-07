@@ -4,7 +4,7 @@ import com.ssafy.a705.domain.member.entity.Member;
 import com.ssafy.a705.domain.tracking._image.entity.TrackingImage;
 import com.ssafy.a705.domain.tracking._image.repository.TrackingImageRepository;
 import com.ssafy.a705.domain.tracking.dto.response.TrackingS3Url;
-import com.ssafy.a705.global.common.utils.S3PresignedUploader;
+import com.ssafy.a705.global.common.utils.S3PresignedUrlGenerator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class TrackingImageService {
 
-    private final S3PresignedUploader uploader;
+    private final S3PresignedUrlGenerator uploader;
     private final TrackingImageRepository imageRepository;
 
     public void saveImage(String imageUrl, String trackingId, Member member) {
