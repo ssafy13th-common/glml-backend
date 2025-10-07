@@ -1,7 +1,7 @@
 package com.ssafy.a705.board.domain.service;
 
 import com.ssafy.a705.board.domain.entity.Post;
-import com.ssafy.a705.board.infrastructure.repository.PostJpaRepository;
+import com.ssafy.a705.board.domain.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class PostStore {
 
-    private final PostJpaRepository postJpaRepository;
+    private final PostRepository postRepository;
 
     public void savePost(Post post) {
-        postJpaRepository.save(post);
+        postRepository.save(post);
     }
 
 }

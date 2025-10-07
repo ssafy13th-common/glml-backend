@@ -9,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 
 public interface PostRepository {
 
+    Post save(Post post);
+
     Optional<Post> findById(Long id);
 
     List<Post> findAllNotDeleted(Long cursorId, Pageable pageable);

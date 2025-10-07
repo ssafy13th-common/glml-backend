@@ -11,6 +11,8 @@ import org.springframework.data.repository.query.Param;
 
 public interface ReplyRepository {
 
+    Reply save(Reply reply);
+
     List<Reply> findAllByPostAndNotDeleted(@Param("post") Post post);
 
     Optional<Reply> findByIdAndReply(@Param("replyId") Long replyId,

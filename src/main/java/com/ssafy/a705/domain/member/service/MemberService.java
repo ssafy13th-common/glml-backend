@@ -2,8 +2,8 @@ package com.ssafy.a705.domain.member.service;
 
 import com.ssafy.a705.board.domain.entity.Post;
 import com.ssafy.a705.board.domain.entity.Reply;
-import com.ssafy.a705.board.domain.service.PostService;
-import com.ssafy.a705.board.domain.service.ReplyService;
+import com.ssafy.a705.board.domain.service.PostReader;
+import com.ssafy.a705.board.domain.service.ReplyReader;
 import com.ssafy.a705.domain.member.dto.request.UpdateNicknameReq;
 import com.ssafy.a705.domain.member.dto.request.UpdateProfileReq;
 import com.ssafy.a705.domain.member.dto.response.MemberDetailRes;
@@ -14,7 +14,7 @@ import com.ssafy.a705.domain.member.entity.Member;
 import com.ssafy.a705.domain.member.exception.DuplicatedEmailException;
 import com.ssafy.a705.domain.member.repository.MemberRepository;
 import com.ssafy.a705.global.common.exception.ForbiddenException;
-import com.ssafy.a705.global.common.utils.S3PresignedUploader;
+import com.ssafy.a705.global.common.utils.S3PresignedUrlGenerator;
 import com.ssafy.a705.global.security.login.dto.CustomUserDetails;
 import java.util.List;
 import java.util.Objects;
@@ -30,9 +30,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MemberService {
 
-    private final PostService postService;
-    private final S3PresignedUploader uploader;
-    private final ReplyService replyService;
+    private final PostReader postService;
+    private final S3PresignedUrlGenerator uploader;
+    private final ReplyReader replyService;
     private final MemberRepository memberRepository;
 
     @Transactional(readOnly = true)
@@ -81,6 +81,13 @@ public class MemberService {
         Member member = memberRepository.getById(userDetails.getId());
         checkMember(userDetails, nicknameReq.email());
         member.updateNickname(nicknameReq.nickname());
+    }
+
+    public String getUrl(String url) {
+        if (url.startsWith("members/")) {
+            return uploader.generatePresignedGetUrl(url);
+        }
+        return url;
     }
 
     private void checkMember(CustomUserDetails userDetails, String email) {

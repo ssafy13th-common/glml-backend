@@ -2,19 +2,22 @@ package com.ssafy.a705.board.application;
 
 import com.ssafy.a705.board.domain.entity.Post;
 import com.ssafy.a705.board.domain.entity.Reply;
-import com.ssafy.a705.board.domain.service.PostService;
+import com.ssafy.a705.board.domain.service.PostReader;
 import com.ssafy.a705.board.domain.service.PostStore;
-import com.ssafy.a705.board.infrastructure.repository.ReplyJpaRepository;
+import com.ssafy.a705.board.domain.service.ReplyReader;
 import com.ssafy.a705.board.presentation.dto.request.PostDetailReq;
 import com.ssafy.a705.board.presentation.dto.response.PostCreateRes;
 import com.ssafy.a705.board.presentation.dto.response.PostDetailRes;
 import com.ssafy.a705.board.presentation.dto.response.PostInfosRes;
 import com.ssafy.a705.domain.member.entity.Member;
 import com.ssafy.a705.domain.member.repository.MemberRepository;
+import com.ssafy.a705.domain.member.service.MemberService;
+import com.ssafy.a705.global.common.exception.ForbiddenException;
 import com.ssafy.a705.global.security.login.dto.CustomUserDetails;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,10 +29,11 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PostApplicationService {
 
-    private final MemberRepository memberRepository;
-    private final PostService postService;
     private final PostStore postStore;
-    private final ReplyJpaRepository replyRepository;
+    private final PostReader postReader;
+    private final ReplyReader replyReader;
+    private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
     @Transactional
     public PostCreateRes createPost(PostDetailReq postReq, CustomUserDetails userDetails) {
@@ -42,19 +46,39 @@ public class PostApplicationService {
     @Transactional(readOnly = true)
     public PostInfosRes getPosts(Long cursorId) {
         Pageable pageable = PageRequest.of(0, 15, Sort.by(Sort.Direction.DESC, "id"));
-        List<Post> posts = postService.getPosts(cursorId, pageable);
+        List<Post> posts = postReader.getPosts(cursorId, pageable);
         Long nextCursor = posts.isEmpty() ? 1 : posts.get(posts.size() - 1).getId();
         return PostInfosRes.from(posts, nextCursor);
     }
 
     @Transactional(readOnly = true)
     public PostDetailRes getPost(Long postId, CustomUserDetails userDetails) {
-        Member member = memberRepository.getById(userDetails.getId());
-        Post post = postService.getPostById(postId);
-        List<Reply> replies = replyRepository.findAllByPostAndNotDeleted(post);
+        memberRepository.getById(userDetails.getId());
+        Post post = postReader.getPost(postId);
+        List<Reply> replies = replyReader.getReplies(post);
+        Map<Long, String> urls = getUrls(post, replies);
+        return PostDetailRes.from(post, replies, urls);
+    }
 
+    @Transactional
+    public void updatePost(Long postId, PostDetailReq postReq, CustomUserDetails userDetails) {
+        Member member = memberRepository.getById(userDetails.getId());
+        Post post = postReader.getPost(postId);
+        checkMemberCanEdit(member, post);
+        post.update(postReq);
+    }
+
+    @Transactional
+    public void deletePost(Long postId, CustomUserDetails userDetails) {
+        Member member = memberRepository.getById(userDetails.getId());
+        Post post = postReader.getPost(postId);
+        checkMemberCanEdit(member, post);
+        post.deletePost();
+    }
+
+    private Map<Long, String> getUrls(Post post, List<Reply> replies) {
         Map<Long, String> urls = new HashMap<>();
-        String url = postService.getUrl(post.getMember().getProfileUrl());
+        String url = memberService.getUrl(post.getMember().getProfileUrl());
         urls.put(post.getMember().getId(), url);
 
         for (Reply reply : replies) {
@@ -62,27 +86,17 @@ public class PostApplicationService {
                 continue;
             }
 
-            url = postService.getUrl(reply.getMember().getProfileUrl());
+            url = memberService.getUrl(reply.getMember().getProfileUrl());
             urls.put(reply.getMember().getId(), url);
         }
 
-        return PostDetailRes.from(post, replies, urls);
+        return urls;
     }
 
-    @Transactional
-    public void updatePost(Long postId, PostDetailReq postReq, CustomUserDetails userDetails) {
-        Member member = memberRepository.getById(userDetails.getId());
-        Post post = postService.getPostById(postId);
-        postService.checkMemberCanEdit(member, post);
-        post.update(postReq);
-    }
-
-    @Transactional
-    public void deletePost(Long postId, CustomUserDetails userDetails) {
-        Member member = memberRepository.getById(userDetails.getId());
-        Post post = postService.getPostById(postId);
-        postService.checkMemberCanEdit(member, post);
-        post.deletePost();
+    private void checkMemberCanEdit(Member member, Post post) {
+        if (!Objects.equals(member, post.getMember())) {
+            throw new ForbiddenException("게시물 접근");
+        }
     }
 
 }
