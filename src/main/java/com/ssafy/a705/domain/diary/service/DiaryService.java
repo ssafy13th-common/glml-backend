@@ -9,15 +9,16 @@ import com.ssafy.a705.domain.diary.dto.response.DiaryInfoRes;
 import com.ssafy.a705.domain.diary.dto.response.DiaryInfosRes;
 import com.ssafy.a705.domain.diary.entity.Diary;
 import com.ssafy.a705.domain.diary.repository.DiaryRepository;
-import com.ssafy.a705.domain.location._color.entity.Color;
-import com.ssafy.a705.domain.location._color.entity.LocationColor;
-import com.ssafy.a705.domain.location._color.repository.LocationColorRepository;
-import com.ssafy.a705.domain.location.entity.Location;
-import com.ssafy.a705.domain.location.repository.LocationRepository;
 import com.ssafy.a705.domain.member.entity.Member;
 import com.ssafy.a705.domain.member.repository.MemberRepository;
 import com.ssafy.a705.global.common.exception.ForbiddenException;
 import com.ssafy.a705.global.security.login.dto.CustomUserDetails;
+import com.ssafy.a705.location.domain.entity.Color;
+import com.ssafy.a705.location.domain.entity.Location;
+import com.ssafy.a705.location.domain.entity.LocationColor;
+import com.ssafy.a705.location.domain.service.LocationColorReader;
+import com.ssafy.a705.location.domain.service.LocationColorStore;
+import com.ssafy.a705.location.domain.service.LocationReader;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,27 +28,28 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class DiaryService {
 
+    private final LocationReader locationReader;
+    private final LocationColorReader colorReader;
+    private final LocationColorStore colorStore;
     private final MemberRepository memberRepository;
     private final DiaryRepository diaryRepository;
-    private final LocationRepository locationRepository;
     private final DiaryImageService diaryImageService;
-    private final LocationColorRepository colorRepository;
 
     @Transactional
     public DiaryCreateRes createDiary(DiaryCreateReq diaryReq, CustomUserDetails userDetails) {
         Member member = memberRepository.getById(userDetails.getId());
-        Location location = locationRepository.getByCode(diaryReq.locationCode());
+        Location location = locationReader.getByCode(diaryReq.locationCode());
         Diary diary = Diary.from(diaryReq, member, location);
         diaryRepository.save(diary);
         diaryImageService.createDiaryImages(diary, diaryReq.imageUrls());
 
-        if (!colorRepository.existsByLocationAndMember(location, member)) {
+        if (!colorReader.existsByLocationAndMember(member, location)) {
             Integer regionCode = getRegionCode(location.getCode());
             Color color = Color.fromCode(regionCode);
-            colorRepository.save(LocationColor.of(color.getHexColor(), member, location));
+            colorStore.save(LocationColor.of(color.getHexColor(), member, location));
         } else {
             int diaryCnt = diaryRepository.countByLocationAndMember(location, member);
-            LocationColor color = colorRepository.getByMemberAndLocation(member, location);
+            LocationColor color = colorReader.getColorByLocation(member, location);
             updateTransparency(diaryCnt, color);
         }
         return DiaryCreateRes.from(diary);
@@ -90,7 +92,7 @@ public class DiaryService {
 
         int diaryCnt = diaryRepository.countByLocationAndMember(diary.getLocation(),
                 diary.getMember());
-        LocationColor color = colorRepository.getByMemberAndLocation(diary.getMember(),
+        LocationColor color = colorReader.getColorByLocation(diary.getMember(),
                 diary.getLocation());
         updateTransparency(Math.max(0, diaryCnt - 1), color);
 

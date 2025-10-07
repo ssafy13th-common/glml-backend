@@ -2,8 +2,8 @@ package com.ssafy.a705.domain.diary.repository;
 
 import com.ssafy.a705.domain.diary.entity.Diary;
 import com.ssafy.a705.domain.diary.exception.DiaryNotFoundException;
-import com.ssafy.a705.domain.location.entity.Location;
 import com.ssafy.a705.domain.member.entity.Member;
+import com.ssafy.a705.location.domain.entity.Location;
 import io.lettuce.core.dynamic.annotation.Param;
 import java.util.Optional;
 import lombok.NonNull;

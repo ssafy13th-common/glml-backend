@@ -2,9 +2,9 @@ package com.ssafy.a705.domain.diary.entity;
 
 import com.ssafy.a705.domain.diary._image.entity.DiaryImage;
 import com.ssafy.a705.domain.diary.dto.request.DiaryCreateReq;
-import com.ssafy.a705.domain.location.entity.Location;
 import com.ssafy.a705.domain.member.entity.Member;
 import com.ssafy.a705.global.common.BaseEntity;
+import com.ssafy.a705.location.domain.entity.Location;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

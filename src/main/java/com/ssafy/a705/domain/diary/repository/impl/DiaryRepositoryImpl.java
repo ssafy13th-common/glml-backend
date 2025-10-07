@@ -1,8 +1,8 @@
 package com.ssafy.a705.domain.diary.repository.impl;
 
 import static com.ssafy.a705.domain.diary.entity.QDiary.diary;
-import static com.ssafy.a705.domain.location._color.entity.QLocationColor.locationColor;
-import static com.ssafy.a705.domain.location.entity.QLocation.location;
+import static com.ssafy.a705.location.domain.entity.QLocation.location;
+import static com.ssafy.a705.location.domain.entity.QLocationColor.locationColor;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.a705.domain.diary.entity.Diary;

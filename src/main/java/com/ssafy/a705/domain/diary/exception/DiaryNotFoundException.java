@@ -5,9 +5,10 @@ import org.springframework.http.HttpStatus;
 
 public class DiaryNotFoundException extends ApiException {
 
-    private static final String message = "여행 기록 정보를 찾을 수 없습니다.";
+    private static final String MESSAGE = "여행 기록 정보를 찾을 수 없습니다.";
 
     public DiaryNotFoundException() {
-        super(HttpStatus.NOT_FOUND, message);
+        super(HttpStatus.NOT_FOUND, MESSAGE);
     }
+
 }
