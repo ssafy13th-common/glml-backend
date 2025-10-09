@@ -16,13 +16,11 @@ public class GroupReaderImpl implements GroupReader {
 
     @Override
     public Group getGroup(Long groupId) {
-        Group group = groupRepository.getById(groupId);
-        return group;
+        return groupRepository.getById(groupId);
     }
 
     @Override
     public List<Group> getGroups(CustomUserDetails userDetails) {
-        List<Group> groups = groupRepository.findGroupsByMemberId(userDetails.getId());
-        return groups;
+        return groupRepository.findGroupsByMemberId(userDetails.getId());
     }
 }

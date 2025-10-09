@@ -1,6 +1,5 @@
 package com.ssafy.a705.group.infrastructure.livelocation.websocket;
 
-import com.ssafy.a705.group.infrastructure.livelocation.websocket.LiveLocationSocketHandler;
 import com.ssafy.a705.global.security.jwt.interceptor.websocket.JwtHandshakeInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;

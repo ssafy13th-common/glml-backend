@@ -1,18 +1,15 @@
 package com.ssafy.a705.group.application.image;
 
 import com.ssafy.a705.global.common.exception.ForbiddenException;
-import com.ssafy.a705.global.common.utils.S3PresignedUrlGenerator;
 import com.ssafy.a705.global.security.login.dto.CustomUserDetails;
 import com.ssafy.a705.group.application.participant.ParticipantApplicationService;
 import com.ssafy.a705.group.domain.image.entity.GroupImage;
-import com.ssafy.a705.group.domain.image.repository.GroupImageRepository;
 import com.ssafy.a705.group.domain.image.service.GroupImageReader;
 import com.ssafy.a705.group.domain.image.service.GroupImageStore;
 import com.ssafy.a705.group.domain.participant.entity.Participant;
 import com.ssafy.a705.group.presentation.image.dto.request.GroupImageCreateReq;
 import com.ssafy.a705.group.presentation.image.dto.response.GroupImageRes;
 import com.ssafy.a705.group.presentation.image.dto.response.GroupImagesRes;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
