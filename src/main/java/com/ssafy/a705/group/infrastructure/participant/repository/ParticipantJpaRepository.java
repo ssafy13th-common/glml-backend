@@ -23,7 +23,7 @@ public interface ParticipantJpaRepository extends JpaRepository<Participant, Lon
 
     @Override
     // 특정 그룹에 속한 멤버들의 프로필 이미지 링크
-    @Query("SELECT new com.ssafy.a705.domain.group._participant.dto.response.ParticipantProfileRes(p.group.id, m.profileUrl) "
+    @Query("SELECT new com.ssafy.a705.group.presentation.participant.dto.response.ParticipantProfileRes(p.group.id, m.profileUrl) "
             + "FROM Participant p JOIN p.member m "
             + "WHERE p.group.id IN :groupIds "
             + "AND p.deletedAt IS NULL")
