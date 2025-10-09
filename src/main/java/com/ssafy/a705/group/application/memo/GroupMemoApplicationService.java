@@ -8,7 +8,7 @@ import com.ssafy.a705.group.domain.memo.exception.MemoAccessDeniedException;
 import com.ssafy.a705.group.domain.memo.service.GroupMemoReader;
 import com.ssafy.a705.group.domain.memo.service.GroupMemoStore;
 import com.ssafy.a705.group.domain.participant.entity.Participant;
-import com.ssafy.a705.group.presentation.memo.dto.response.GroupMemoReq;
+import com.ssafy.a705.group.presentation.memo.dto.request.GroupMemoReq;
 import com.ssafy.a705.group.presentation.memo.dto.response.GroupMemoRes;
 import com.ssafy.a705.group.presentation.memo.dto.response.GroupMemosRes;
 import java.util.List;

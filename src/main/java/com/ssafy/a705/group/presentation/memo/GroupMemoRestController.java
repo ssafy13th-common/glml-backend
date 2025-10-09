@@ -3,7 +3,7 @@ package com.ssafy.a705.group.presentation.memo;
 import com.ssafy.a705.global.common.controller.ApiResponse;
 import com.ssafy.a705.global.security.login.dto.CustomUserDetails;
 import com.ssafy.a705.group.application.memo.GroupMemoApplicationService;
-import com.ssafy.a705.group.presentation.memo.dto.response.GroupMemoReq;
+import com.ssafy.a705.group.presentation.memo.dto.request.GroupMemoReq;
 import com.ssafy.a705.group.presentation.memo.dto.response.GroupMemoRes;
 import com.ssafy.a705.group.presentation.memo.dto.response.GroupMemosRes;
 import jakarta.validation.Valid;
