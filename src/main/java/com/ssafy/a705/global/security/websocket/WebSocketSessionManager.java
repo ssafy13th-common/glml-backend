@@ -1,6 +1,6 @@
 package com.ssafy.a705.global.security.websocket;
 
-import com.ssafy.a705.domain.group._livelocation.Exception.SessionCloseFailException;
+import com.ssafy.a705.group.domain.livelocation.exception.SessionCloseFailException;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
