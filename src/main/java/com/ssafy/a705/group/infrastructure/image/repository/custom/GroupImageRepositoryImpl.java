@@ -1,8 +1,9 @@
 package com.ssafy.a705.group.infrastructure.image.repository.custom;
 
-import static com.ssafy.a705.domain.group._image.entity.QGroupImage.groupImage;
-import static com.ssafy.a705.domain.group._participant.entity.QParticipant.participant;
-import static com.ssafy.a705.domain.group.entity.QGroup.group;
+
+import static com.ssafy.a705.group.domain.group.entity.QGroup.group;
+import static com.ssafy.a705.group.domain.image.entity.QGroupImage.groupImage;
+import static com.ssafy.a705.group.domain.participant.entity.QParticipant.participant;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.a705.group.domain.image.entity.GroupImage;
