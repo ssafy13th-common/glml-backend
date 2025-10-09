@@ -1,4 +1,4 @@
-package com.ssafy.a705.group.presentation.memo.dto.response;
+package com.ssafy.a705.group.presentation.memo.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 
