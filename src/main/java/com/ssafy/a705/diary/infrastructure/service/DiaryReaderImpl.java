@@ -4,7 +4,7 @@ import com.ssafy.a705.diary.domain.entity.Diary;
 import com.ssafy.a705.diary.domain.exception.DiaryNotFoundException;
 import com.ssafy.a705.diary.domain.repository.DiaryRepository;
 import com.ssafy.a705.diary.domain.service.DiaryReader;
-import com.ssafy.a705.domain.member.entity.Member;
+import com.ssafy.a705.member.domain.entity.Member;
 import com.ssafy.a705.location.domain.entity.Location;
 import java.util.List;
 import java.util.Optional;

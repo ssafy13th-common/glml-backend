@@ -1,9 +1,8 @@
 package com.ssafy.a705.global.security.jwt.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.a705.domain.member.dto.TokenRes;
-import com.ssafy.a705.domain.member.repository.MemberRepository;
 import com.ssafy.a705.global.common.controller.ApiResponse;
+import com.ssafy.a705.member.presentation.dto.TokenRes;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
@@ -52,8 +51,6 @@ public class JwtProvider {
     private static final String REFRESH_TOKEN_SUBJECT = "RefreshToken";
     private static final String EMAIL_CLAIM = "email";
     private static final String BEARER = "Bearer ";
-
-    private final MemberRepository memberRepository;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 

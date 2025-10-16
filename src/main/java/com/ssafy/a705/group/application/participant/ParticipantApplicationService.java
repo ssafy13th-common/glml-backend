@@ -1,15 +1,10 @@
 package com.ssafy.a705.group.application.participant;
 
-import com.ssafy.a705.domain.chat.dto.ChatMemberInfoDTO;
-import com.ssafy.a705.domain.chat.dto.request.AddMemberReq;
-import com.ssafy.a705.domain.chat.dto.request.AddMembersReq;
-import com.ssafy.a705.domain.chat.dto.request.RemoveMemberReq;
-import com.ssafy.a705.domain.chat.service.ChatRoomService;
-import com.ssafy.a705.group.presentation.receipt.dto.request.SettlementReq;
-import com.ssafy.a705.group.presentation.receipt.dto.response.SettlementInfoRes;
-import com.ssafy.a705.group.presentation.receipt.dto.response.SettlementRes;
-import com.ssafy.a705.domain.member.entity.Member;
-import com.ssafy.a705.domain.member.repository.MemberRepository;
+import com.ssafy.a705.chat.dto.ChatMemberInfoDTO;
+import com.ssafy.a705.chat.dto.request.AddMemberReq;
+import com.ssafy.a705.chat.dto.request.AddMembersReq;
+import com.ssafy.a705.chat.dto.request.RemoveMemberReq;
+import com.ssafy.a705.chat.service.ChatRoomService;
 import com.ssafy.a705.global.security.login.dto.CustomUserDetails;
 import com.ssafy.a705.group.domain.group.entity.Group;
 import com.ssafy.a705.group.domain.group.exception.GroupAccessDeniedException;
@@ -23,6 +18,11 @@ import com.ssafy.a705.group.domain.participant.service.ParticipantStore;
 import com.ssafy.a705.group.presentation.participant.dto.request.ParticipantUpdateReq;
 import com.ssafy.a705.group.presentation.participant.dto.request.ParticipantsUpdateReq;
 import com.ssafy.a705.group.presentation.participant.dto.response.ParticipantsRes;
+import com.ssafy.a705.group.presentation.receipt.dto.request.SettlementReq;
+import com.ssafy.a705.group.presentation.receipt.dto.response.SettlementInfoRes;
+import com.ssafy.a705.group.presentation.receipt.dto.response.SettlementRes;
+import com.ssafy.a705.member.domain.entity.Member;
+import com.ssafy.a705.member.domain.service.MemberReader;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -39,14 +39,15 @@ public class ParticipantApplicationService {
     private final GroupReader groupReader;
     private final ParticipantReader participantReader;
     private final ParticipantStore participantStore;
-    private final MemberRepository memberRepository;
+    private final MemberReader memberReader;
     private final ChatRoomService chatRoomService;
 
     @Transactional
-    public void createParticipants(Long groupId, List<String> emails, CustomUserDetails userDetails) {
+    public void createParticipants(Long groupId, List<String> emails,
+            CustomUserDetails userDetails) {
         leaderAuthorityCheck(groupId, userDetails);
         Group group = groupReader.getGroup(groupId);
-        List<Member> members = memberRepository.getAllByEmail(emails);
+        List<Member> members = memberReader.getAllMembers(emails);
         Set<Long> existingParticipantIds = participantReader.getExistingEmails(groupId, emails);
         // 각 유저 별 중복 체크 후 생성
         List<Participant> newParticipants = members.stream()
@@ -70,7 +71,7 @@ public class ParticipantApplicationService {
         if (participantReader.isExists(groupId, userDetails.getId())) {
             throw new DuplicatedParticipantException();
         }
-        Member member = memberRepository.getById(userDetails.getId());
+        Member member = memberReader.getMember(userDetails.getEmail());
         Group group = groupReader.getGroup(groupId);
         Participant groupMember = Participant.of(group, member, Role.LEADER);
 
@@ -94,10 +95,12 @@ public class ParticipantApplicationService {
     }
 
     @Transactional
-    public ParticipantsRes updateParticipants(ParticipantsUpdateReq request, CustomUserDetails userDetails) {
+    public ParticipantsRes updateParticipants(ParticipantsUpdateReq request,
+            CustomUserDetails userDetails) {
         memberAuthorityCheck(request.groupId(), userDetails); // 멤버에 속해있는지 권한 체크
 
-        Map<Long, ParticipantUpdateReq> participantUpdateReqMap = request.updateParticipants().stream()
+        Map<Long, ParticipantUpdateReq> participantUpdateReqMap = request.updateParticipants()
+                .stream()
                 .collect(Collectors.toMap(ParticipantUpdateReq::participantId,
                         ParticipantUpdateReq -> ParticipantUpdateReq)); // id와 ParticipantUpdateReq 매핑
         List<Long> participantsId = request.updateParticipants().stream()
@@ -117,7 +120,8 @@ public class ParticipantApplicationService {
     }
 
     @Transactional
-    public SettlementRes updateParticipantsFinalAmount(Long groupId, SettlementReq settlementReq, CustomUserDetails userDetails) {
+    public SettlementRes updateParticipantsFinalAmount(Long groupId, SettlementReq settlementReq,
+            CustomUserDetails userDetails) {
         memberAuthorityCheck(groupId, userDetails);
         List<SettlementInfoRes> settlements = settlementReq.memberEmails().stream()
                 .map(memberEmail -> {
@@ -141,15 +145,16 @@ public class ParticipantApplicationService {
 
     @Transactional
     public void deleteParticipant(Long groupId, String email,
-                                  CustomUserDetails userDetails) {
+            CustomUserDetails userDetails) {
         leaderAuthorityCheck(groupId, userDetails);
 
         Group group = groupReader.getGroup(groupId);
 
-        List<ChatMemberInfoDTO> infoList = participantReader.findMembersByGroupId(groupId).stream().map(participant -> {
-            Member m = participant.getMember();
-            return ChatMemberInfoDTO.of(m.getEmail(), m.getNickname());
-        }).toList();
+        List<ChatMemberInfoDTO> infoList = participantReader.findMembersByGroupId(groupId).stream()
+                .map(participant -> {
+                    Member m = participant.getMember();
+                    return ChatMemberInfoDTO.of(m.getEmail(), m.getNickname());
+                }).toList();
 
         chatRoomService.removeMember(RemoveMemberReq.of(group.getChatRoomId(), infoList));
 

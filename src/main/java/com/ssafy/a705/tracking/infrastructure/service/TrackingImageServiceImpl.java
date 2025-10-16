@@ -1,6 +1,6 @@
 package com.ssafy.a705.tracking.infrastructure.service;
 
-import com.ssafy.a705.domain.member.entity.Member;
+import com.ssafy.a705.member.domain.entity.Member;
 import com.ssafy.a705.global.common.utils.S3PresignedUrlGenerator;
 import com.ssafy.a705.tracking.domain.entity.Tracking;
 import com.ssafy.a705.tracking.domain.entity.TrackingImage;

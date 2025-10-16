@@ -1,7 +1,7 @@
 package com.ssafy.a705.domain.member._auth.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.ssafy.a705.domain.member.entity.Gender;
+import com.ssafy.a705.member.domain.entity.Gender;
 import jakarta.validation.constraints.NotBlank;
 import lombok.NonNull;
 

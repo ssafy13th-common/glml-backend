@@ -1,7 +1,7 @@
 package com.ssafy.a705.global.security.jwt.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.a705.domain.member.dto.EmailLoginReq;
+import com.ssafy.a705.member.presentation.dto.EmailLoginReq;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;

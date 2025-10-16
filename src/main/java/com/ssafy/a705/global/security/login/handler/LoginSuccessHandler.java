@@ -1,6 +1,6 @@
 package com.ssafy.a705.global.security.login.handler;
 
-import com.ssafy.a705.domain.member.dto.TokenRes;
+import com.ssafy.a705.member.presentation.dto.TokenRes;
 import com.ssafy.a705.global.common.redis.RedisService;
 import com.ssafy.a705.global.security.jwt.service.JwtProvider;
 import com.ssafy.a705.global.security.login.dto.CustomUserDetails;

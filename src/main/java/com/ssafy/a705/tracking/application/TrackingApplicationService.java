@@ -1,8 +1,8 @@
 package com.ssafy.a705.tracking.application;
 
-import com.ssafy.a705.domain.member.entity.Member;
-import com.ssafy.a705.domain.member.repository.MemberRepository;
 import com.ssafy.a705.global.security.login.dto.CustomUserDetails;
+import com.ssafy.a705.member.domain.entity.Member;
+import com.ssafy.a705.member.domain.service.MemberService;
 import com.ssafy.a705.tracking.domain.entity.Tracking;
 import com.ssafy.a705.tracking.domain.service.TrackingImageService;
 import com.ssafy.a705.tracking.domain.service.TrackingService;
@@ -24,13 +24,13 @@ public class TrackingApplicationService {
 
     private final TrackingStore trackingStore;
     private final TrackingService trackingService;
+    private final MemberService memberService;
     private final TrackingImageService imageService;
-    private final MemberRepository memberRepository;
 
     @Transactional
     public TrackingCreateRes createTracking(TrackingCreateReq trackingCreateReq,
             CustomUserDetails userDetails) {
-        Member member = memberRepository.getById(userDetails.getId());
+        Member member = memberService.getMember(userDetails.getEmail());
         Tracking tracking = Tracking.from(trackingCreateReq, userDetails);
         trackingStore.save(tracking);
 
@@ -40,7 +40,7 @@ public class TrackingApplicationService {
 
     @Transactional(readOnly = true)
     public TrackingInfosRes getTrackingInfos(CustomUserDetails userDetails) {
-        Member member = memberRepository.getById(userDetails.getId());
+        Member member = memberService.getMember(userDetails.getEmail());
         List<TrackingS3Url> trackingImages = imageService.getImages(member);
         return TrackingInfosRes.of(trackingImages);
     }
@@ -55,7 +55,7 @@ public class TrackingApplicationService {
     @Transactional
     public void updateTracking(String trackingId, TrackingUpdateReq trackingUpdateReq,
             CustomUserDetails userDetails) {
-        Member member = memberRepository.getById(userDetails.getId());
+        Member member = memberService.getMember(userDetails.getEmail());
 
         Tracking tracking = trackingService.getTracking(trackingId, userDetails);
         tracking.update(trackingUpdateReq);
@@ -66,7 +66,7 @@ public class TrackingApplicationService {
 
     @Transactional
     public void deleteTracking(String trackingId, CustomUserDetails userDetails) {
-        Member member = memberRepository.getById(userDetails.getId());
+        Member member = memberService.getMember(userDetails.getEmail());
 
         Tracking tracking = trackingService.getTracking(trackingId, userDetails);
         tracking.delete();
@@ -74,5 +74,5 @@ public class TrackingApplicationService {
 
         imageService.deleteImage(trackingId, member);
     }
-    
+
 }

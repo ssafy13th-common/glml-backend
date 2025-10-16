@@ -9,8 +9,6 @@ import com.ssafy.a705.diary.presentation.dto.response.DiaryCreateRes;
 import com.ssafy.a705.diary.presentation.dto.response.DiaryDetailRes;
 import com.ssafy.a705.diary.presentation.dto.response.DiaryInfoRes;
 import com.ssafy.a705.diary.presentation.dto.response.DiaryInfosRes;
-import com.ssafy.a705.domain.member.entity.Member;
-import com.ssafy.a705.domain.member.repository.MemberRepository;
 import com.ssafy.a705.global.common.exception.ForbiddenException;
 import com.ssafy.a705.global.security.login.dto.CustomUserDetails;
 import com.ssafy.a705.location.domain.entity.Color;
@@ -19,6 +17,8 @@ import com.ssafy.a705.location.domain.entity.LocationColor;
 import com.ssafy.a705.location.domain.service.LocationColorReader;
 import com.ssafy.a705.location.domain.service.LocationColorStore;
 import com.ssafy.a705.location.domain.service.LocationReader;
+import com.ssafy.a705.member.domain.entity.Member;
+import com.ssafy.a705.member.domain.service.MemberService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,14 +31,14 @@ public class DiaryApplicationService {
     private final LocationReader locationReader;
     private final LocationColorReader colorReader;
     private final LocationColorStore colorStore;
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
     private final DiaryReader diaryReader;
     private final DiaryStore diaryStore;
     private final DiaryImageApplicationService imageService;
 
     @Transactional
     public DiaryCreateRes createDiary(DiaryCreateReq diaryReq, CustomUserDetails userDetails) {
-        Member member = memberRepository.getById(userDetails.getId());
+        Member member = memberService.getMember(userDetails.getEmail());
         Location location = locationReader.getByCode(diaryReq.locationCode());
         Diary diary = Diary.from(diaryReq, member, location);
         diaryStore.save(diary);
@@ -59,7 +59,7 @@ public class DiaryApplicationService {
     @Transactional(readOnly = true)
     public DiaryInfosRes getDiaries(CustomUserDetails userDetails, Integer locationCode,
             Long cursorId, int pageSize) {
-        Member member = memberRepository.getByEmail(userDetails.getEmail());
+        Member member = memberService.getMember(userDetails.getEmail());
         List<Diary> diaries = diaryReader.getAllDiaries(member, locationCode, cursorId,
                 pageSize);
         return DiaryInfosRes.from(diaries.stream()

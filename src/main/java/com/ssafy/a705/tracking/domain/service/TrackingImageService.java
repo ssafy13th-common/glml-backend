@@ -1,6 +1,6 @@
 package com.ssafy.a705.tracking.domain.service;
 
-import com.ssafy.a705.domain.member.entity.Member;
+import com.ssafy.a705.member.domain.entity.Member;
 import com.ssafy.a705.tracking.domain.entity.Tracking;
 import com.ssafy.a705.tracking.presentation.dto.response.TrackingS3Url;
 import java.util.List;

@@ -1,6 +1,6 @@
 package com.ssafy.a705.location.domain.entity;
 
-import com.ssafy.a705.domain.member.entity.Member;
+import com.ssafy.a705.member.domain.entity.Member;
 import com.ssafy.a705.global.common.BaseEntity;
 import com.ssafy.a705.location.presentation.dto.request.ColorUpdateReq;
 import jakarta.persistence.Column;

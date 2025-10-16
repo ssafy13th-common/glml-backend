@@ -1,6 +1,6 @@
 package com.ssafy.a705.tracking.infrastructure.repository;
 
-import com.ssafy.a705.domain.member.entity.Member;
+import com.ssafy.a705.member.domain.entity.Member;
 import com.ssafy.a705.tracking.domain.entity.TrackingImage;
 import com.ssafy.a705.tracking.domain.repository.TrackingImageRepository;
 import java.util.List;

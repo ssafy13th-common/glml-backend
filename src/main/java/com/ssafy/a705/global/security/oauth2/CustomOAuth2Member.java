@@ -1,6 +1,6 @@
 package com.ssafy.a705.global.security.oauth2;
 
-import com.ssafy.a705.domain.member.entity.Role;
+import com.ssafy.a705.member.domain.entity.Role;
 import java.util.Collection;
 import java.util.Map;
 import lombok.Getter;

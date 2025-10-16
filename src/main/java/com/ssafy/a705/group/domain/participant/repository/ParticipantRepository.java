@@ -8,10 +8,13 @@ import java.util.Set;
 import org.springframework.data.repository.query.Param;
 
 public interface ParticipantRepository {
+
     Participant save(Participant participant);
-    List<Participant> saveAll(List<Participant> participants);
+
+    <S extends Participant> List<S> saveAll(Iterable<S> participants);
 
     List<Participant> findMembersByGroupId(@Param("groupId") Long groupId);
+
     List<ParticipantProfileRes> findProfilesByGroupIds(@Param("groupIds") List<Long> groupIds);
 
     List<Participant> findByIdInAndDeletedAtIsNull(
@@ -26,6 +29,7 @@ public interface ParticipantRepository {
 
     Optional<Participant> findParticipantByMemberEmailAndGroupId(@Param("email") String email,
             @Param("groupId") Long groupId);
+
     Set<Long> findExistingMemberIdsByEmails(@Param("groupId") Long groupId,
             @Param("emails") List<String> emails);
 

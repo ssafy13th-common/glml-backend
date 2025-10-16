@@ -6,7 +6,7 @@ import static com.ssafy.a705.location.domain.entity.QLocationColor.locationColor
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.a705.diary.domain.entity.Diary;
-import com.ssafy.a705.domain.member.entity.Member;
+import com.ssafy.a705.member.domain.entity.Member;
 import jakarta.annotation.Nullable;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

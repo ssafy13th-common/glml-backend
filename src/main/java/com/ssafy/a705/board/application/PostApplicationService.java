@@ -9,11 +9,11 @@ import com.ssafy.a705.board.presentation.dto.request.PostDetailReq;
 import com.ssafy.a705.board.presentation.dto.response.PostCreateRes;
 import com.ssafy.a705.board.presentation.dto.response.PostDetailRes;
 import com.ssafy.a705.board.presentation.dto.response.PostInfosRes;
-import com.ssafy.a705.domain.member.entity.Member;
-import com.ssafy.a705.domain.member.repository.MemberRepository;
-import com.ssafy.a705.domain.member.service.MemberService;
 import com.ssafy.a705.global.common.exception.ForbiddenException;
 import com.ssafy.a705.global.security.login.dto.CustomUserDetails;
+import com.ssafy.a705.member.domain.entity.Member;
+import com.ssafy.a705.member.domain.service.MemberImageService;
+import com.ssafy.a705.member.domain.service.MemberService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,11 +33,11 @@ public class PostApplicationService {
     private final PostReader postReader;
     private final ReplyReader replyReader;
     private final MemberService memberService;
-    private final MemberRepository memberRepository;
+    private final MemberImageService memberImageService;
 
     @Transactional
     public PostCreateRes createPost(PostDetailReq postReq, CustomUserDetails userDetails) {
-        Member member = memberRepository.getById(userDetails.getId());
+        Member member = memberService.getMember(userDetails.getEmail());
         Post post = Post.from(postReq, member);
         postStore.savePost(post);
         return PostCreateRes.from(post);
@@ -53,7 +53,7 @@ public class PostApplicationService {
 
     @Transactional(readOnly = true)
     public PostDetailRes getPost(Long postId, CustomUserDetails userDetails) {
-        memberRepository.getById(userDetails.getId());
+        Member member = memberService.getMember(userDetails.getEmail());
         Post post = postReader.getPost(postId);
         List<Reply> replies = replyReader.getReplies(post);
         Map<Long, String> urls = getUrls(post, replies);
@@ -62,7 +62,7 @@ public class PostApplicationService {
 
     @Transactional
     public void updatePost(Long postId, PostDetailReq postReq, CustomUserDetails userDetails) {
-        Member member = memberRepository.getById(userDetails.getId());
+        Member member = memberService.getMember(userDetails.getEmail());
         Post post = postReader.getPost(postId);
         checkMemberCanEdit(member, post);
         post.update(postReq);
@@ -70,7 +70,7 @@ public class PostApplicationService {
 
     @Transactional
     public void deletePost(Long postId, CustomUserDetails userDetails) {
-        Member member = memberRepository.getById(userDetails.getId());
+        Member member = memberService.getMember(userDetails.getEmail());
         Post post = postReader.getPost(postId);
         checkMemberCanEdit(member, post);
         post.deletePost();
@@ -78,7 +78,7 @@ public class PostApplicationService {
 
     private Map<Long, String> getUrls(Post post, List<Reply> replies) {
         Map<Long, String> urls = new HashMap<>();
-        String url = memberService.getUrl(post.getMember().getProfileUrl());
+        String url = memberImageService.getUrl(post.getMember().getProfileUrl());
         urls.put(post.getMember().getId(), url);
 
         for (Reply reply : replies) {
@@ -86,7 +86,7 @@ public class PostApplicationService {
                 continue;
             }
 
-            url = memberService.getUrl(reply.getMember().getProfileUrl());
+            url = memberImageService.getUrl(reply.getMember().getProfileUrl());
             urls.put(reply.getMember().getId(), url);
         }
 

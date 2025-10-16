@@ -1,7 +1,7 @@
 package com.ssafy.a705.group.domain.participant.entity;
 
 import com.ssafy.a705.group.domain.group.entity.Group;
-import com.ssafy.a705.domain.member.entity.Member;
+import com.ssafy.a705.member.domain.entity.Member;
 import com.ssafy.a705.global.common.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

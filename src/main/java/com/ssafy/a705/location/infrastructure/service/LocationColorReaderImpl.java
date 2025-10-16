@@ -1,6 +1,6 @@
 package com.ssafy.a705.location.infrastructure.service;
 
-import com.ssafy.a705.domain.member.entity.Member;
+import com.ssafy.a705.member.domain.entity.Member;
 import com.ssafy.a705.location.domain.entity.Location;
 import com.ssafy.a705.location.domain.entity.LocationColor;
 import com.ssafy.a705.location.domain.exception.LocationColorNotFoundException;

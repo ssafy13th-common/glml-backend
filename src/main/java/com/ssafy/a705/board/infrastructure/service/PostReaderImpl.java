@@ -5,7 +5,7 @@ import com.ssafy.a705.board.domain.exception.DeletedPostException;
 import com.ssafy.a705.board.domain.exception.PostNotFoundException;
 import com.ssafy.a705.board.domain.repository.PostRepository;
 import com.ssafy.a705.board.domain.service.PostReader;
-import com.ssafy.a705.domain.member.entity.Member;
+import com.ssafy.a705.member.domain.entity.Member;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;

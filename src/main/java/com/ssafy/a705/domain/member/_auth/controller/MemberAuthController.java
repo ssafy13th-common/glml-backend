@@ -5,10 +5,10 @@ import com.ssafy.a705.domain.member._auth.dto.request.ResendEmailReq;
 import com.ssafy.a705.domain.member._auth.dto.request.SignUpReq;
 import com.ssafy.a705.domain.member._auth.service.KakaoService;
 import com.ssafy.a705.domain.member._auth.service.MemberAuthService;
-import com.ssafy.a705.domain.member.dto.TokenRes;
-import com.ssafy.a705.domain.member.service.MemberService;
 import com.ssafy.a705.global.common.controller.ApiResponse;
 import com.ssafy.a705.global.security.login.dto.CustomUserDetails;
+import com.ssafy.a705.member.application.MemberApplicationService;
+import com.ssafy.a705.member.presentation.dto.TokenRes;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class MemberAuthController {
 
     private final MemberAuthService authService;
     private final KakaoService kakaoService;
-    private final MemberService memberService;
+    private final MemberApplicationService memberService;
 
     @PostMapping("/signup")
     public ResponseEntity<ApiResponse<Void>> signUp(@RequestBody @Valid SignUpReq request,

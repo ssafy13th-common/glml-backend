@@ -6,14 +6,17 @@ import com.ssafy.a705.domain.member._auth.exception.IlleagalVerificationExceptio
 import com.ssafy.a705.domain.member._auth.exception.InvalidTokenException;
 import com.ssafy.a705.domain.member._auth.exception.VerifiedEmailException;
 import com.ssafy.a705.domain.member._auth.repository.MemberAuthRepository;
-import com.ssafy.a705.domain.member.entity.Member;
-import com.ssafy.a705.domain.member.entity.Role;
-import com.ssafy.a705.domain.member.entity.SocialType;
-import com.ssafy.a705.domain.member.repository.MemberRepository;
 import com.ssafy.a705.global.common.redis.RedisService;
 import com.ssafy.a705.global.security.jwt.service.JwtProvider;
 import com.ssafy.a705.global.security.login.dto.CustomUserDetails;
 import com.ssafy.a705.global.security.logout.service.BlacklistService;
+import com.ssafy.a705.member.domain.entity.Member;
+import com.ssafy.a705.member.domain.entity.Role;
+import com.ssafy.a705.member.domain.entity.SocialType;
+import com.ssafy.a705.member.domain.service.MemberReader;
+import com.ssafy.a705.member.domain.service.MemberService;
+import com.ssafy.a705.member.domain.service.MemberStore;
+import com.ssafy.a705.member.infrastructure.repository.MemberJpaRepository;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import java.net.URLEncoder;
@@ -33,13 +36,16 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MemberAuthService {
 
-    private final MemberRepository memberRepository;
+    private final MemberReader memberReader;
+    private final MemberStore memberStore;
+    private final MemberJpaRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final MemberAuthRepository authRepository;
     private final JavaMailSender mailSender;
     private final JwtProvider jwtProvider;
     private final BlacklistService blacklistService;
     private final RedisService redisService;
+    private final MemberService memberService;
 
     @Transactional
     public void signUp(SignUpReq request, String baseUrl) {
@@ -53,7 +59,7 @@ public class MemberAuthService {
                 passwordEncoder.encode(request.password()), request.gender(),
                 request.profileImage(),
                 Role.USER, SocialType.LOCAL);
-        memberRepository.save(member);
+        memberStore.save(member);
         issueAndVerification(member, baseUrl);
     }
 
@@ -62,7 +68,7 @@ public class MemberAuthService {
 
         email = email.trim().toLowerCase();
         log.info("[RESEND] 요청 email={}", email);
-        Member m = memberRepository.getByEmail(email);
+        Member m = memberService.getMember(email);
 
         if (email == null || email.isBlank()) {
             log.warn("[RESEND] 이메일 누락");
@@ -101,7 +107,7 @@ public class MemberAuthService {
         }
 
         Long memberId = Long.valueOf(memberIdStr);
-        Member m = memberRepository.getById(memberId);
+        Member m = memberRepository.findByIdAndDeletedAtIsNull(memberId).orElse(null);
         log.info("member found : {}, member verified email? : {}", m.getEmail(),
                 m.isEmailVerified());
         if (m.isEmailVerified()) {
@@ -141,7 +147,7 @@ public class MemberAuthService {
                     <div style="font-family:sans-serif">
                             <h2>안녕하세요, %s님</h2>
                             <p>아래 버튼을 눌러 이메일 인증을 완료해주세요. (유효기간: 5분)</p>
-                          
+                    
                             <!-- Bulletproof button (table + a) -->
                             <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="border-collapse:separate;">
                               <tr>
@@ -155,7 +161,7 @@ public class MemberAuthService {
                                 </td>
                               </tr>
                             </table>
-                          
+                    
                             <!-- 텍스트 링크 백업 -->
                             <p style="font-size:12px;color:#6b7280;margin-top:12px;">
                               버튼이 동작하지 않으면 다음 링크를 브라우저에 복사해 붙여넣어 주세요:<br>
@@ -175,7 +181,7 @@ public class MemberAuthService {
 
     @Transactional
     public void delete(CustomUserDetails customUserDetails, HttpServletRequest request) {
-        Member member = memberRepository.getByEmail(customUserDetails.getEmail());
+        Member member = memberService.getMember(customUserDetails.getEmail());
         member.deleteMember();
         // 토큰 삭제
         String accessToken = jwtProvider.extractAccessToken(request).orElse(null);

@@ -2,8 +2,6 @@ package com.ssafy.a705.location.application;
 
 import com.ssafy.a705.diary.domain.exception.DiaryNotFoundException;
 import com.ssafy.a705.diary.infrastructure.repository.DiaryJpaRepository;
-import com.ssafy.a705.domain.member.entity.Member;
-import com.ssafy.a705.domain.member.repository.MemberRepository;
 import com.ssafy.a705.global.security.login.dto.CustomUserDetails;
 import com.ssafy.a705.location.domain.entity.Location;
 import com.ssafy.a705.location.domain.entity.LocationColor;
@@ -13,6 +11,8 @@ import com.ssafy.a705.location.domain.service.LocationColorStore;
 import com.ssafy.a705.location.domain.service.LocationReader;
 import com.ssafy.a705.location.presentation.dto.request.ColorUpdateReq;
 import com.ssafy.a705.location.presentation.dto.response.MapColorRes;
+import com.ssafy.a705.member.domain.entity.Member;
+import com.ssafy.a705.member.domain.service.MemberService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -30,13 +30,13 @@ public class LocationColorApplicationService {
     private final LocationReader locationReader;
     private final LocationColorStore colorStore;
     private final LocationColorReader colorReader;
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
     private final DiaryJpaRepository diaryRepository;
 
     @Transactional
     public void updateLocationColor(Integer locationId, ColorUpdateReq colorReq,
             CustomUserDetails userDetails) {
-        Member member = memberRepository.getById(userDetails.getId());
+        Member member = memberService.getMember(userDetails.getEmail());
         Location location = locationReader.getByCode(locationId);
 
         checkDiary(location, member);
@@ -58,7 +58,7 @@ public class LocationColorApplicationService {
             return MapColorRes.from(new ArrayList<>());
         }
 
-        Member member = memberRepository.getById(userDetails.getId());
+        Member member = memberService.getMember(userDetails.getEmail());
         List<LocationColor> colors = colorReader.findAllLocationColors(member);
         return MapColorRes.from(colors);
     }

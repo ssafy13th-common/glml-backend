@@ -1,10 +1,11 @@
 package com.ssafy.a705.global.security.oauth2.service;
 
-import com.ssafy.a705.domain.member.entity.Member;
-import com.ssafy.a705.domain.member.entity.SocialType;
-import com.ssafy.a705.domain.member.repository.MemberRepository;
 import com.ssafy.a705.global.security.oauth2.CustomOAuth2Member;
 import com.ssafy.a705.global.security.oauth2.OAuthAttributes;
+import com.ssafy.a705.member.domain.entity.Member;
+import com.ssafy.a705.member.domain.entity.SocialType;
+import com.ssafy.a705.member.domain.service.MemberStore;
+import com.ssafy.a705.member.infrastructure.repository.MemberJpaRepository;
 import java.util.Collections;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class CustomOAuth2UserService implements
         OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
-    private final MemberRepository memberRepository;
-
+    private final MemberJpaRepository memberRepository;
+    private final MemberStore memberStore;
     private static final String NAVER = "naver";
     private static final String KAKAO = "kakao";
 
@@ -113,6 +114,6 @@ public class CustomOAuth2UserService implements
      */
     private Member saveMember(OAuthAttributes attributes, SocialType socialType) {
         Member createdMember = attributes.toEntity(socialType, attributes.getOAuth2Member());
-        return memberRepository.save(createdMember);
+        return memberStore.save(createdMember);
     }
 }

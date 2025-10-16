@@ -1,8 +1,8 @@
 package com.ssafy.a705.group.application.group;
 
-import com.ssafy.a705.domain.chat.dto.request.CreateRoomReq;
-import com.ssafy.a705.domain.chat.dto.response.ChatRoomRes;
-import com.ssafy.a705.domain.chat.service.ChatRoomService;
+import com.ssafy.a705.chat.dto.request.CreateRoomReq;
+import com.ssafy.a705.chat.dto.response.ChatRoomRes;
+import com.ssafy.a705.chat.service.ChatRoomService;
 import com.ssafy.a705.global.security.login.dto.CustomUserDetails;
 import com.ssafy.a705.group.application.participant.ParticipantApplicationService;
 import com.ssafy.a705.group.domain.group.entity.Group;

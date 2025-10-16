@@ -1,8 +1,8 @@
 package com.ssafy.a705.global.security.oauth2;
 
-import com.ssafy.a705.domain.member.entity.Member;
-import com.ssafy.a705.domain.member.entity.Role;
-import com.ssafy.a705.domain.member.entity.SocialType;
+import com.ssafy.a705.member.domain.entity.Member;
+import com.ssafy.a705.member.domain.entity.Role;
+import com.ssafy.a705.member.domain.entity.SocialType;
 import com.ssafy.a705.global.security.oauth2.entity.KakaoOAuth2Member;
 import com.ssafy.a705.global.security.oauth2.entity.OAuth2Member;
 import java.util.Map;

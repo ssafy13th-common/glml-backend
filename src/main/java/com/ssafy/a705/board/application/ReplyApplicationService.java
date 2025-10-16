@@ -7,10 +7,10 @@ import com.ssafy.a705.board.domain.service.ReplyReader;
 import com.ssafy.a705.board.domain.service.ReplyStore;
 import com.ssafy.a705.board.presentation.dto.request.ReplyRegisterReq;
 import com.ssafy.a705.board.presentation.dto.request.ReplyUpdateReq;
-import com.ssafy.a705.domain.member.entity.Member;
-import com.ssafy.a705.domain.member.repository.MemberRepository;
 import com.ssafy.a705.global.common.exception.ForbiddenException;
 import com.ssafy.a705.global.security.login.dto.CustomUserDetails;
+import com.ssafy.a705.member.domain.entity.Member;
+import com.ssafy.a705.member.domain.service.MemberService;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ReplyApplicationService {
 
-    private final MemberRepository memberRepository;
+    private final MemberService memberService;
     private final PostReader postService;
     private final ReplyReader replyService;
     private final ReplyStore replyStore;
@@ -28,7 +28,7 @@ public class ReplyApplicationService {
     @Transactional
     public void createReply(Long postId, ReplyRegisterReq replyReq,
             CustomUserDetails userDetails) {
-        Member member = memberRepository.getById(userDetails.getId());
+        Member member = memberService.getMember(userDetails.getEmail());
         Post post = postService.getPost(postId);
         Reply parent = replyService.findParent(replyReq.parentId(), post);
         Reply reply = Reply.from(replyReq, post, member, parent);
@@ -38,7 +38,7 @@ public class ReplyApplicationService {
     @Transactional
     public void updateReply(Long postId, Long replyId, ReplyUpdateReq replyUpdateReq,
             CustomUserDetails userDetails) {
-        Member member = memberRepository.getById(userDetails.getId());
+        Member member = memberService.getMember(userDetails.getEmail());
         Post post = postService.getPost(postId);
         Reply reply = replyService.getReply(replyId, post);
         checkMemberCanEdit(member, reply);
@@ -47,7 +47,7 @@ public class ReplyApplicationService {
 
     @Transactional
     public void deleteReply(Long postId, Long replyId, CustomUserDetails userDetails) {
-        Member member = memberRepository.getById(userDetails.getId());
+        Member member = memberService.getMember(userDetails.getEmail());
         Post post = postService.getPost(postId);
         Reply reply = replyService.getReply(replyId, post);
         checkMemberCanEdit(member, reply);

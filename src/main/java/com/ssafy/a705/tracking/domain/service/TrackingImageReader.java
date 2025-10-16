@@ -1,6 +1,6 @@
 package com.ssafy.a705.tracking.domain.service;
 
-import com.ssafy.a705.domain.member.entity.Member;
+import com.ssafy.a705.member.domain.entity.Member;
 import com.ssafy.a705.tracking.domain.entity.TrackingImage;
 import java.util.List;
 import java.util.Optional;

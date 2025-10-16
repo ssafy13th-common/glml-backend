@@ -1,6 +1,6 @@
 package com.ssafy.a705.global.security.login.dto;
 
-import com.ssafy.a705.domain.member.entity.Member;
+import com.ssafy.a705.member.domain.entity.Member;
 import java.util.Collection;
 import java.util.Collections;
 import lombok.Getter;
